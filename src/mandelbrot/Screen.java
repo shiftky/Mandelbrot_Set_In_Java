@@ -7,8 +7,8 @@ import javax.swing.*;
 class Screen extends JPanel{
 	private MandelbrotSet mandelbrotSet;
 
-	public Screen(){
-		mandelbrotSet = new MandelbrotSet();
+	public Screen(int w, int h){
+		mandelbrotSet = new MandelbrotSet(w, h);
 		setBackground(Color.black);
 	}
 	

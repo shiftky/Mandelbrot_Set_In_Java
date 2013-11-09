@@ -4,9 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MandelbrotInJava extends JFrame {
-	public MandelbrotInJava(String title){
+	public MandelbrotInJava(String title, int width, int height){
+		int scr_width = width - 40;
+		int scr_height = height - 80;
+
 		setTitle(title);
-		setSize(400, 320);
+		setSize(width, height);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -16,8 +19,8 @@ public class MandelbrotInJava extends JFrame {
 	    ctrlPanel.add(button);
 	    getContentPane().add(ctrlPanel, BorderLayout.NORTH);
 	    
-	    Screen screen = new Screen();
-	    screen.setPreferredSize(new Dimension(360, 240));
+	    Screen screen = new Screen(scr_width, scr_height);
+	    screen.setPreferredSize(new Dimension(scr_width, scr_height));
 
 	    JPanel screenPanel = new JPanel();
 	    screenPanel.add(screen);
@@ -25,7 +28,7 @@ public class MandelbrotInJava extends JFrame {
 	}
 
 	public static void main(String[] args){
-		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java");
+		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java", 640, 620);
 		mandelbrot.setVisible(true);
 	}
 }
