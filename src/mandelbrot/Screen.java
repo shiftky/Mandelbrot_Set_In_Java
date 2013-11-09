@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import javax.swing.*;
 
 class Screen extends JPanel{
-	private MandelbrotSet mandelbrotSet;
+	public MandelbrotSet mandelbrotSet;
 
 	public Screen(int w, int h){
 		mandelbrotSet = new MandelbrotSet(w, h);

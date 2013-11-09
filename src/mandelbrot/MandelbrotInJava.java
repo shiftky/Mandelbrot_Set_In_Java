@@ -2,9 +2,15 @@ package mandelbrot;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class MandelbrotInJava extends JFrame {
-	public MandelbrotInJava(String title, int width, int height){
+	Screen screen;
+	JCheckBox chckbxShowAxes;
+	
+	public MandelbrotInJava(String title){
+		int width = 640, height = 620;
 		int scr_width = width - 40;
 		int scr_height = height - 80;
 
@@ -19,16 +25,27 @@ public class MandelbrotInJava extends JFrame {
 	    ctrlPanel.add(button);
 	    getContentPane().add(ctrlPanel, BorderLayout.NORTH);
 	    
-	    Screen screen = new Screen(scr_width, scr_height);
+	    chckbxShowAxes = new JCheckBox("show axes");
+	    ctrlPanel.add(chckbxShowAxes);
+	    
+	    screen = new Screen(scr_width, scr_height);
 	    screen.setPreferredSize(new Dimension(scr_width, scr_height));
 
 	    JPanel screenPanel = new JPanel();
 	    screenPanel.add(screen);
 	    getContentPane().add(screenPanel, BorderLayout.CENTER);
+
+	    // event listener
+	    chckbxShowAxes.addChangeListener(new ChangeListener() {
+	    	public void stateChanged(ChangeEvent arg0) {
+	    		screen.mandelbrotSet.showAxes = chckbxShowAxes.isSelected();
+	    		screen.repaint();
+	    	}
+	    });
 	}
 
 	public static void main(String[] args){
-		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java", 640, 620);
+		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java");
 		mandelbrot.setVisible(true);
 	}
 }
