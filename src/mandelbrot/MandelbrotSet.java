@@ -9,7 +9,7 @@ class MandelbrotSet{
 
 	    for(int x=0; x<360; x++){
 			for (int y=0; y<240; y++){
-				Complex c = new Complex(map(x, 0.0, 360.0, -2.0, 1.0), map(y, 0, 360, -1.5, 1.5));
+				Complex c = new Complex(map(x, 0.0, 360.0, -2.0, 1.0), map(y, 0.0, 240.0, -1.5, 1.5));
 
 				if(mandel(c, 30) == true){
 					g2d.drawLine(x, y, x, y);
