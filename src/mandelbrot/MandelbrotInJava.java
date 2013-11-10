@@ -1,12 +1,14 @@
 package mandelbrot;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
 public class MandelbrotInJava extends JFrame {
 	Screen screen;
+	ControlPanel ctrlPanel;
 	JCheckBox chckbxShowAxes;
 	
 	public MandelbrotInJava(String title){
@@ -20,30 +22,30 @@ public class MandelbrotInJava extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	    JPanel ctrlPanel = new JPanel();
+	    JPanel operationPanel = new JPanel();
 	    JButton button = new JButton("Run");
-	    ctrlPanel.add(button);
-	    getContentPane().add(ctrlPanel, BorderLayout.NORTH);
+	    operationPanel.add(button);
+	    getContentPane().add(operationPanel, BorderLayout.NORTH);
 	    
 	    chckbxShowAxes = new JCheckBox("show axes");
-	    ctrlPanel.add(chckbxShowAxes);
+	    operationPanel.add(chckbxShowAxes);
 	    
 	    screen = new Screen(scr_width, scr_height);
-	    screen.setPreferredSize(new Dimension(scr_width, scr_height));
+	    ctrlPanel = new ControlPanel(scr_width, scr_height);
+	    screen.add(ctrlPanel, BorderLayout.CENTER);
+	    JPanel graphicsPanel = new JPanel();
+	    graphicsPanel.add(screen);
 
-	    JPanel screenPanel = new JPanel();
-	    screenPanel.add(screen);
-	    getContentPane().add(screenPanel, BorderLayout.CENTER);
+	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
 
 	    // event listener
 	    chckbxShowAxes.addChangeListener(new ChangeListener() {
 	    	public void stateChanged(ChangeEvent arg0) {
-	    		screen.mandelbrotSet.showAxes = chckbxShowAxes.isSelected();
-	    		screen.repaint();
+	    		ctrlPanel.drawAxes(chckbxShowAxes.isSelected());
 	    	}
 	    });
 	}
-
+    
 	public static void main(String[] args){
 		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java");
 		mandelbrot.setVisible(true);
