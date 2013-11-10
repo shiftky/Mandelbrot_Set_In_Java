@@ -6,8 +6,8 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public class ControlPanel extends JPanel{
-	public int width;
-	public int height;
+	int width;
+	int height;
 	
 	public ControlPanel(int w, int h){
 		width = w;

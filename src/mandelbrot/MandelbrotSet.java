@@ -4,9 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 class MandelbrotSet{
-	public int width;
-	public int height;
-	public boolean showAxes = false;
+	int width;
+	int height;
 	
 	public MandelbrotSet(int w, int h){
 		width = w;

@@ -5,9 +5,9 @@ import java.awt.*;
 import javax.swing.*;
 
 class Screen extends JPanel{
-	public MandelbrotSet mandelbrotSet;
-	public int width;
-	public int height;
+	MandelbrotSet mandelbrotSet;
+	int width;
+	int height;
 
 	public Screen(int w, int h){
 		width = w;

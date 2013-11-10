@@ -1,12 +1,11 @@
 package mandelbrot;
 
 import java.awt.*;
-
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 
-public class MandelbrotInJava extends JFrame {
+public class MandelbrotInJava extends JFrame implements ItemListener  {
 	Screen screen;
 	ControlPanel ctrlPanel;
 	JCheckBox chckbxShowAxes;
@@ -39,13 +38,13 @@ public class MandelbrotInJava extends JFrame {
 	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
 
 	    // event listener
-	    chckbxShowAxes.addChangeListener(new ChangeListener() {
-	    	public void stateChanged(ChangeEvent arg0) {
-	    		ctrlPanel.drawAxes(chckbxShowAxes.isSelected());
-	    	}
-	    });
+	    chckbxShowAxes.addItemListener(this);
 	}
-    
+
+  	public void itemStateChanged(ItemEvent arg0) {
+		ctrlPanel.drawAxes(chckbxShowAxes.isSelected());
+	}  
+
 	public static void main(String[] args){
 		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java");
 		mandelbrot.setVisible(true);
