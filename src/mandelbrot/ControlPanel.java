@@ -18,8 +18,8 @@ public class ControlPanel extends JPanel{
 
 	public void drawAxes(boolean checkbox){
 		if (checkbox) {
-			int x = (int) map(0.0, -2.0, 1.0, 0.0, width);
-			int y = (int) map(0.0, -1.5, 1.5, 0.0, height);
+			int x = (int) Utils.map(0.0, -2.0, 1.0, 0.0, width);
+			int y = (int) Utils.map(0.0, -1.5, 1.5, 0.0, height);
 			Graphics2D g2d = (Graphics2D) this.getGraphics();
 			g2d.setColor(Color.white);
 			g2d.drawLine(x, 0, x, height);
@@ -27,9 +27,5 @@ public class ControlPanel extends JPanel{
 		} else {
 			repaint();
 		}
-	}
-
-	private double map(double value, double start1, double stop1, double start2, double stop2){
-		return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 	}
 }
