@@ -21,6 +21,10 @@ class MandelbrotSet extends JPanel implements Observer {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(width, height));
 		
+		initRange();
+	}
+
+	public void initRange(){
 		r1 = -2.0; r2 = 1.0;
 		i1 = -1.5; i2 = 1.5;
 	}
@@ -74,5 +78,10 @@ class MandelbrotSet extends JPanel implements Observer {
 			score += 1;
 		}
 		return false;
+	}
+
+	public void reset() {
+		initRange();
+		repaint();
 	}
 }
