@@ -12,9 +12,9 @@ import java.awt.event.MouseMotionAdapter;
 public class ControlPanel extends JPanel {
 	public boolean drawAxes = false;
 	private EnlargeListener enlargeListener = null;
+	private MouseMovedListener mouseMovedListener = null;
 	private int width, height;
 	private int x1, x2, y1, y2;
-	private int current_x, current_y;
 
 	public ControlPanel(int w, int h){
 		width = w;
@@ -26,9 +26,16 @@ public class ControlPanel extends JPanel {
 		addMouseMotionListener(new inMouseMotionListener());
 	}
 
-	public void setEnlergeListener(EnlargeListener listener)
-	{
+	public void setEnlergeListener(EnlargeListener listener){
 		this.enlargeListener = listener;
+	}
+	
+	public void setMouseMovedListener(MouseMovedListener listener){
+		this.mouseMovedListener = listener;
+	}
+
+	private void initMousePoint(){
+		x1 = y1 = x2 = y2 = -1;
 	}
 
 	public void paintComponent(Graphics g){
@@ -49,16 +56,9 @@ public class ControlPanel extends JPanel {
 		g2d.drawLine(0, y, width, y);
 	}
 
-	private void initMousePoint(){
-		x1 = y1 = x2 = y2 = -1;
-	}
-
 	class inMouseMotionListener extends MouseMotionAdapter{
 		public void mouseMoved(MouseEvent e){
-			current_x = e.getX();
-			current_y = e.getY();
-			System.out.println(current_x);
-			System.out.println(current_y);
+			mouseMovedListener.changeCursorPosition(e.getX(), e.getY());
 		}
 
 		public void mouseDragged(MouseEvent e){

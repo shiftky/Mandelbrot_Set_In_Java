@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 class MandelbrotSet extends JPanel implements EnlargeListener {
-	int width, height;
-	double r1, r2, i1, i2;
+	public double r1, r2, i1, i2;
+	public int width, height;
 
 	public MandelbrotSet(int w, int h){
 		width = w;
@@ -33,13 +33,6 @@ class MandelbrotSet extends JPanel implements EnlargeListener {
 	}
 
 	public void changeDrawingArea(int x1, int x2, int y1, int y2) {
-		/*
-		int x1 = ((EnlargeEvent) event).x1;
-		int x2 = ((EnlargeEvent) event).x2;
-		int y1 = ((EnlargeEvent) event).y1;
-		int y2 = ((EnlargeEvent) event).y2;
-		*/
-
 		if (x2 != -1 && y2 != -1 ){
 			double tmp_r1 = Utils.map((double) x1, 0.0, (double) width, r1, r2);
 			double tmp_r2 = Utils.map((double) x2, 0.0, (double) width, r1, r2);

@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-public class MandelbrotInJava extends JFrame {
+public class MandelbrotInJava extends JFrame implements MouseMovedListener {
 	MandelbrotSet mandelbrotSet;
 	ControlPanel ctrlPanel;
 	JCheckBox chckbxShowAxes;
@@ -41,6 +41,7 @@ public class MandelbrotInJava extends JFrame {
 	    mandelbrotSet = new MandelbrotSet(scr_width, scr_height);
 	    ctrlPanel = new ControlPanel(scr_width, scr_height);
 	    ctrlPanel.setEnlergeListener(mandelbrotSet);
+	    ctrlPanel.setMouseMovedListener(this);
 	    mandelbrotSet.add(ctrlPanel, BorderLayout.CENTER);
 	    graphicsPanel.add(mandelbrotSet);
 
@@ -49,9 +50,9 @@ public class MandelbrotInJava extends JFrame {
 	    statusPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 	    
 	    lblRe = new JLabel("Re: ");
-	    lblReValue = new JLabel("0.0");
-	    lblIm = new JLabel("Im: ");
-	    lblImValue = new JLabel("0.0");
+	    lblReValue = new JLabel("0.000000");
+	    lblIm = new JLabel("  Im: ");
+	    lblImValue = new JLabel("0.000000");
 	    statusPanel.add(lblRe);
 	    statusPanel.add(lblReValue);
 	    statusPanel.add(lblIm);
@@ -75,6 +76,13 @@ public class MandelbrotInJava extends JFrame {
 	    		mandelbrotSet.reset();
 	    	}
 	    });
+	}
+
+	public void changeCursorPosition(int x, int y) {
+		double real = Utils.map(x, 0.0, mandelbrotSet.width, mandelbrotSet.r1, mandelbrotSet.r2);
+		double img = Utils.map(y, 0.0, mandelbrotSet.width, mandelbrotSet.r1, mandelbrotSet.r2);
+		lblReValue.setText(String.format("%.06f", real));
+		lblImValue.setText(String.format("%.06f", img));
 	}
 
 	public static void main(String[] args){
