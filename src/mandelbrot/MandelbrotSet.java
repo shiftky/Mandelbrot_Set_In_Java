@@ -35,15 +35,15 @@ class MandelbrotSet extends JPanel implements Observer {
 		int y1 = ((EnlargeEvent) event).y1;
 		int y2 = ((EnlargeEvent) event).y2;
 
-		double tmp_r1 = Utils.map((double) x1, 0.0, (double) width, r1, r2);
-		double tmp_r2 = Utils.map((double) x2, 0.0, (double) width, r1, r2);
-		double tmp_i1 = Utils.map((double) y1, 0.0, (double) height, i1, i2);
-		double tmp_i2 = Utils.map((double) y2, 0.0, (double) height, i1, i2);
-
-		r1 = tmp_r1; r2 = tmp_r2;
-		i1 = tmp_i1; i2 = tmp_i2;
-
-		repaint();
+		if (x2 != -1 && y2 != -1 ){
+			double tmp_r1 = Utils.map((double) x1, 0.0, (double) width, r1, r2);
+			double tmp_r2 = Utils.map((double) x2, 0.0, (double) width, r1, r2);
+			double tmp_i1 = Utils.map((double) y1, 0.0, (double) height, i1, i2);
+			double tmp_i2 = Utils.map((double) y2, 0.0, (double) height, i1, i2);
+			r1 = tmp_r1; r2 = tmp_r2;
+			i1 = tmp_i1; i2 = tmp_i2;
+			repaint();
+		}
 	}
 	
 	public void paintComponent(Graphics g){

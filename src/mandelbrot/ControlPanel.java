@@ -26,6 +26,8 @@ public class ControlPanel extends JPanel {
 		addMouseMotionListener(new inMouseMotionListener());
 
 		notifyObservers = new NotifyObservers();
+		
+		initMousePoint();
 	}
 
 	public void paintComponent(Graphics g){
@@ -46,6 +48,10 @@ public class ControlPanel extends JPanel {
 		g2d.drawLine(0, y, width, y);
 	}
 
+	private void initMousePoint(){
+		x1 = y1 = x2 = y2 = -1;
+	}
+
 	class inMouseMotionListener extends MouseMotionAdapter{
 		public void mouseDragged(MouseEvent e){
 			x2 = e.getX();
@@ -63,7 +69,7 @@ public class ControlPanel extends JPanel {
 		
 		public void mouseReleased(MouseEvent e){
 			notifyObservers.notifyChangePoints();
-			x1 = y1 = x2 = y2 = -1;
+			initMousePoint();
 			repaint();
 		}
 	}
