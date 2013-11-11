@@ -1,5 +1,7 @@
 package mandelbrot;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,7 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
-class MandelbrotSet extends JPanel{
+class MandelbrotSet extends JPanel implements Observer {
 	int width, height;
 	
 	public MandelbrotSet(int w, int h){
@@ -17,6 +19,16 @@ class MandelbrotSet extends JPanel{
 		setBackground(Color.black);
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(width, height));
+	}
+	
+	public void update(Observable o, Object event){
+		int x1 = ((EnlargeEvent) event).x1;
+		int x2 = ((EnlargeEvent) event).x2;
+		int y1 = ((EnlargeEvent) event).y1;
+		int y2 = ((EnlargeEvent) event).y2;
+
+		System.out.print("mouse points: ");
+		System.out.println(x1 + "," +  x2 + " " + y1 + "," + y2);
 	}
 	
 	public void paintComponent(Graphics g){

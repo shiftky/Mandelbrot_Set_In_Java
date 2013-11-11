@@ -32,7 +32,9 @@ public class MandelbrotInJava extends JFrame implements ItemListener  {
 
 	    mandelbrotSet = new MandelbrotSet(scr_width, scr_height);
 	    ctrlPanel = new ControlPanel(scr_width, scr_height);
+	    ctrlPanel.notifyObservers.addObserver(mandelbrotSet);
 	    mandelbrotSet.add(ctrlPanel, BorderLayout.CENTER);
+
 	    JPanel graphicsPanel = new JPanel();
 	    graphicsPanel.add(mandelbrotSet);
 

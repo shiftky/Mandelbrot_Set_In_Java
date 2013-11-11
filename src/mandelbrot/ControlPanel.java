@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Observable;
 import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,6 +14,7 @@ public class ControlPanel extends JPanel {
 	public boolean drawAxes = false;
 	int width, height;
 	int x1, x2, y1, y2;
+	NotifyObservers notifyObservers;
 
 	public ControlPanel(int w, int h){
 		width = w;
@@ -22,6 +24,8 @@ public class ControlPanel extends JPanel {
 		
 		addMouseListener(new inMouseListener());
 		addMouseMotionListener(new inMouseMotionListener());
+
+		notifyObservers = new NotifyObservers();
 	}
 
 	public void paintComponent(Graphics g){
@@ -42,6 +46,14 @@ public class ControlPanel extends JPanel {
 		g2d.drawLine(0, y, width, y);
 	}
 
+	class inMouseMotionListener extends MouseMotionAdapter{
+		public void mouseDragged(MouseEvent e){
+			x2 = e.getX();
+			y2 = e.getY();
+			repaint();
+		}
+	}
+
 	class inMouseListener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
 			x1 = e.getX();
@@ -50,18 +62,18 @@ public class ControlPanel extends JPanel {
 		}
 		
 		public void mouseReleased(MouseEvent e){
+			notifyObservers.notifyChangePoints();
 			x1 = y1 = x2 = y2 = -1;
 			repaint();
 		}
 	}
 
-	class inMouseMotionListener extends MouseMotionAdapter{
-		public void mouseDragged(MouseEvent e){
-			x2 = e.getX();
-			y2 = e.getY();
-			repaint();
+	public class NotifyObservers extends Observable{
+		public void notifyChangePoints() {
+			EnlargeEvent enlargeEvent = new EnlargeEvent(this);
+			enlargeEvent.setPoints(x1, x2, y1, y2);
+			setChanged();
+			notifyObservers(enlargeEvent);	
 		}
 	}
-	
-
 }
