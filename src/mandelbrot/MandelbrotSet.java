@@ -11,7 +11,8 @@ import javax.swing.JPanel;
 
 class MandelbrotSet extends JPanel implements Observer {
 	int width, height;
-	
+	double r1, r2, i1, i2;
+
 	public MandelbrotSet(int w, int h){
 		width = w;
 		height = h;
@@ -19,6 +20,9 @@ class MandelbrotSet extends JPanel implements Observer {
 		setBackground(Color.black);
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(width, height));
+		
+		r1 = -2.0; r2 = 1.0;
+		i1 = -1.5; i2 = 1.5;
 	}
 	
 	public void update(Observable o, Object event){
@@ -27,8 +31,15 @@ class MandelbrotSet extends JPanel implements Observer {
 		int y1 = ((EnlargeEvent) event).y1;
 		int y2 = ((EnlargeEvent) event).y2;
 
-		System.out.print("mouse points: ");
-		System.out.println(x1 + "," +  x2 + " " + y1 + "," + y2);
+		double tmp_r1 = Utils.map((double) x1, 0.0, (double) width, r1, r2);
+		double tmp_r2 = Utils.map((double) x2, 0.0, (double) width, r1, r2);
+		double tmp_i1 = Utils.map((double) y1, 0.0, (double) height, i1, i2);
+		double tmp_i2 = Utils.map((double) y2, 0.0, (double) height, i1, i2);
+
+		r1 = tmp_r1; r2 = tmp_r2;
+		i1 = tmp_i1; i2 = tmp_i2;
+
+		repaint();
 	}
 	
 	public void paintComponent(Graphics g){
@@ -39,8 +50,8 @@ class MandelbrotSet extends JPanel implements Observer {
 	public void draw(Graphics2D g2d){
 		for(int x=0; x<width; x++){
 			for (int y=0; y<height; y++){
-				Complex c = new Complex(Utils.map((double) x, 0.0, (double) width, -2.0, 1.0),
-									    Utils.map((double) y, 0.0, (double) height, -1.5, 1.5));
+				Complex c = new Complex(Utils.map((double) x, 0.0, (double) width, r1, r2),
+									    Utils.map((double) y, 0.0, (double) height, i1, i2));
 
 				if (mandel(c, 20) == true){
 					g2d.setColor(new Color(102, 153, 255));
