@@ -1,7 +1,5 @@
 package mandelbrot;
 
-import java.util.Observable;
-import java.util.Observer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,7 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
-class MandelbrotSet extends JPanel implements Observer {
+class MandelbrotSet extends JPanel implements EnlargeListener {
 	int width, height;
 	double r1, r2, i1, i2;
 
@@ -28,12 +26,19 @@ class MandelbrotSet extends JPanel implements Observer {
 		r1 = -2.0; r2 = 1.0;
 		i1 = -1.5; i2 = 1.5;
 	}
-	
-	public void update(Observable o, Object event){
+
+	public void reset() {
+		initRange();
+		repaint();
+	}
+
+	public void changeDrawingArea(int x1, int x2, int y1, int y2) {
+		/*
 		int x1 = ((EnlargeEvent) event).x1;
 		int x2 = ((EnlargeEvent) event).x2;
 		int y1 = ((EnlargeEvent) event).y1;
 		int y2 = ((EnlargeEvent) event).y2;
+		*/
 
 		if (x2 != -1 && y2 != -1 ){
 			double tmp_r1 = Utils.map((double) x1, 0.0, (double) width, r1, r2);
@@ -57,7 +62,7 @@ class MandelbrotSet extends JPanel implements Observer {
 				Complex c = new Complex(Utils.map((double) x, 0.0, (double) width, r1, r2),
 									    Utils.map((double) y, 0.0, (double) height, i1, i2));
 
-				if (mandel(c, 20) == true){
+				if (mandel(c, 30) == true){
 					g2d.setColor(new Color(102, 153, 255));
 					g2d.drawLine(x, y, x, y);
 				}
@@ -80,8 +85,5 @@ class MandelbrotSet extends JPanel implements Observer {
 		return false;
 	}
 
-	public void reset() {
-		initRange();
-		repaint();
-	}
+
 }
