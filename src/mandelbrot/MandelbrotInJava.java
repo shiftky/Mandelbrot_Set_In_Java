@@ -6,7 +6,7 @@ import java.awt.event.ItemListener;
 import javax.swing.*;
 
 public class MandelbrotInJava extends JFrame implements ItemListener  {
-	Screen screen;
+	MandelbrotSet mandelbrotSet;
 	ControlPanel ctrlPanel;
 	JCheckBox chckbxShowAxes;
 	
@@ -29,11 +29,12 @@ public class MandelbrotInJava extends JFrame implements ItemListener  {
 	    chckbxShowAxes = new JCheckBox("show axes");
 	    operationPanel.add(chckbxShowAxes);
 	    
-	    screen = new Screen(scr_width, scr_height);
+
+	    mandelbrotSet = new MandelbrotSet(scr_width, scr_height);
 	    ctrlPanel = new ControlPanel(scr_width, scr_height);
-	    screen.add(ctrlPanel, BorderLayout.CENTER);
+	    mandelbrotSet.add(ctrlPanel, BorderLayout.CENTER);
 	    JPanel graphicsPanel = new JPanel();
-	    graphicsPanel.add(screen);
+	    graphicsPanel.add(mandelbrotSet);
 
 	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
 
@@ -42,7 +43,8 @@ public class MandelbrotInJava extends JFrame implements ItemListener  {
 	}
 
   	public void itemStateChanged(ItemEvent arg0) {
-		ctrlPanel.drawAxes(chckbxShowAxes.isSelected());
+		ctrlPanel.drawAxes = chckbxShowAxes.isSelected();
+		ctrlPanel.repaint();
 	}  
 
 	public static void main(String[] args){
