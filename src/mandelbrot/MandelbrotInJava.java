@@ -10,6 +10,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.MouseMovedListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MandelbrotInJava extends JFrame implements MouseMovedListener, ChangeProgressListener {
 	MandelbrotPanel mandelbrotPanel;
@@ -22,11 +24,8 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	private JLabel lblImValue;
 	private JPanel lblPanel;
 	private JProgressBar progressBar;
+	private JPanel btnPanel;
 	
-	protected void createOperatoinPanel(){
-		
-	}
-
 	public MandelbrotInJava(String title){
 		int width = 640, height = 680;
 		int scr_width = width - 40;
@@ -36,9 +35,32 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 
 		// operation panel
 	    JPanel operationPanel = new JPanel();
-	    JButton btnReset = new JButton("Reset");
-	    operationPanel.add(btnReset);
+	    getContentPane().add(operationPanel, BorderLayout.NORTH);
 
+	    btnPanel = new JPanel();
+	    FlowLayout flowLayout_1 = (FlowLayout) btnPanel.getLayout();
+	    flowLayout_1.setVgap(2);
+	    JButton btnReset = new JButton("Reset");
+	    btnPanel.add(btnReset);
+	    JButton btnSave = new JButton("Save");
+	    btnPanel.add(btnSave);
+	    GroupLayout gl_operationPanel = new GroupLayout(operationPanel);
+	    gl_operationPanel.setHorizontalGroup(
+	    	gl_operationPanel.createParallelGroup(Alignment.LEADING)
+	    		.addGroup(gl_operationPanel.createSequentialGroup()
+	    			.addContainerGap()
+	    			.addComponent(btnPanel, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+	    			.addContainerGap(457, Short.MAX_VALUE))
+	    );
+	    gl_operationPanel.setVerticalGroup(
+	    	gl_operationPanel.createParallelGroup(Alignment.LEADING)
+	    		.addGroup(gl_operationPanel.createSequentialGroup()
+	    			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	    			.addComponent(btnPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	    );
+	    operationPanel.setLayout(gl_operationPanel);
+	    
+	    
 	    // Mandelbrot set panel
 	    JPanel graphicsPanel = new JPanel();
 	    mandelbrotPanel = new MandelbrotPanel(scr_width, scr_height);
@@ -49,6 +71,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    ctrlPanel.setMouseMovedListener(this);
 	    mandelbrotPanel.add(ctrlPanel, BorderLayout.CENTER);
 	    graphicsPanel.add(mandelbrotPanel);
+	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
 
 	    // status panel
 	    lblPanel = new JPanel();
@@ -65,7 +88,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    
 	    progressBar = new JProgressBar();
 	    progressBar.setValue(0);
-
+    
 	    statusPanel = new JPanel();
 	    GroupLayout gl_statusPanel = new GroupLayout(statusPanel);
 	    gl_statusPanel.setHorizontalGroup(
@@ -87,16 +110,18 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    			.addContainerGap(12, Short.MAX_VALUE))
 	    );
 	    statusPanel.setLayout(gl_statusPanel);
-
-	    // add panels
-	    getContentPane().add(operationPanel, BorderLayout.NORTH);
-	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
 	    getContentPane().add(statusPanel, BorderLayout.SOUTH);
-	    
+
 	    // event listener
 	    btnReset.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		mandelbrotPanel.reset();
+	    	}
+	    });
+
+	    btnSave.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent arg0) {
+	    		mandelbrotPanel.save();
 	    	}
 	    });
 

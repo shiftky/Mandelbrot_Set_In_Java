@@ -5,8 +5,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
 
 import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.EnlargeListener;
@@ -29,28 +35,18 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 
 		initRange();
 	}
-	
+
 	public void setChangeProgressListener(ChangeProgressListener listener){
 		this.changeProgressListener = listener;
+	}
+
+	public void paintComponent(Graphics g){
+		g.drawImage(buffimg, 0, 0, this);
 	}
 
 	public void draw(){
 		Thread thread = new DrawThread(this);
 		thread.start();
-	}
-
-	public void initRange(){
-		r1 = -2.0; r2 = 1.0;
-		i1 = -1.5; i2 = 1.5;
-	}
-
-	public void reset() {
-		initRange();
-		draw();
-	}
-
-	public void paintComponent(Graphics g){
-		g.drawImage(buffimg, 0, 0, this);
 	}
 
 	public void changeDrawingArea(int x1, int x2, int y1, int y2) {
@@ -63,5 +59,24 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 			i1 = tmp_i1; i2 = tmp_i2;
 			draw();
 		}
+	}
+
+	public void save() {
+		try {
+			SaveImage.save(buffimg, this);
+		} catch (IOException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Failed to save image.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	public void reset() {
+		initRange();
+		draw();
+	}
+
+	private void initRange(){
+		r1 = -2.0; r2 = 1.0;
+		i1 = -1.5; i2 = 1.5;
 	}
 }
