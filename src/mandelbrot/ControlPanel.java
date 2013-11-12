@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+
 import javax.swing.JPanel;
 
 import mandelbrot.events.EnlargeListener;
@@ -94,14 +95,12 @@ public class ControlPanel extends JPanel {
 				 mouse_x2 -= up;
 				 mouse_y1 += up;
 				 mouse_y2 -= up;
-				 repaint();
 			 } else if( old_mouse_y < e.getY() ) { 
 				 up = old_mouse_y - e.getY();
 				 mouse_x1 -= up;
 				 mouse_x2 += up;
 				 mouse_y1 -= up;
 				 mouse_y2 += up;
-				 repaint();
 			 }
 			 old_mouse_y = e.getY();
 			 repaint();
@@ -118,7 +117,6 @@ public class ControlPanel extends JPanel {
 		public void mouseReleased(MouseEvent e){
 			enlargeListener.changeDrawingArea(x1, x1+(y2-y1), y1, y2);
 			initMousePoint();
-			repaint();
 		}
 	}
 }

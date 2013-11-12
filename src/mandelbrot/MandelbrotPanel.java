@@ -5,17 +5,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
 
+import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.EnlargeListener;
 
-class MandelbrotSet extends JPanel implements EnlargeListener {
+class MandelbrotPanel extends JPanel implements EnlargeListener {
 	public double r1, r2, i1, i2;
 	public int width, height;
-	private BufferedImage buffimg;
-	private Graphics bfg;
+	public BufferedImage buffimg;
+	public Graphics bfg;
+	public ChangeProgressListener changeProgressListener = null;
 
-	public MandelbrotSet(int w, int h){
+	public MandelbrotPanel(int w, int h){
 		width = w;
 		height = h;
 		setLayout(new BorderLayout());
@@ -25,23 +28,15 @@ class MandelbrotSet extends JPanel implements EnlargeListener {
 		bfg = buffimg.createGraphics();
 
 		initRange();
-		drawSet();
+	}
+	
+	public void setChangeProgressListener(ChangeProgressListener listener){
+		this.changeProgressListener = listener;
 	}
 
-	public void drawSet(){
-		bfg.setColor(Color.black);
-		bfg.fillRect(0, 0, width, height);
-		for(int x=0; x<width; x++){
-			for (int y=0; y<height; y++){
-				Complex c = new Complex(Utils.map((double) x, 0.0, (double) width, r1, r2),
-									    Utils.map((double) y, 0.0, (double) height, i1, i2));
-				bfg.setColor(new Color(102, 153, 255));
-				if (mandel(c, 30) == true){
-			        bfg.fillRect(x, y, 1, 1);
-				}
-			}
-		}	
-		repaint();
+	public void draw(){
+		Thread thread = new DrawThread(this);
+		thread.start();
 	}
 
 	public void initRange(){
@@ -51,11 +46,11 @@ class MandelbrotSet extends JPanel implements EnlargeListener {
 
 	public void reset() {
 		initRange();
-		drawSet();
+		draw();
 	}
 
 	public void paintComponent(Graphics g){
-	    g.drawImage(buffimg, 0, 0, this);
+		g.drawImage(buffimg, 0, 0, this);
 	}
 
 	public void changeDrawingArea(int x1, int x2, int y1, int y2) {
@@ -66,22 +61,7 @@ class MandelbrotSet extends JPanel implements EnlargeListener {
 			double tmp_i2 = Utils.map((double) y2, 0.0, (double) height, i1, i2);
 			r1 = tmp_r1; r2 = tmp_r2;
 			i1 = tmp_i1; i2 = tmp_i2;
-			drawSet();
+			draw();
 		}
-	}
-
-	public boolean mandel(Complex z, int max){
-		int score = 0;
-		Complex c = new Complex(z.re, z.im);
-
-		while (score < max){
-			z = z.sqr();
-			z = z.add(c);
-			if (z.abs() >= 3.5){
-				return true;
-			}
-			score += 1;
-		}
-		return false;
 	}
 }
