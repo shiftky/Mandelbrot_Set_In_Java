@@ -18,6 +18,7 @@ import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.EnlargeListener;
 
 class MandelbrotPanel extends JPanel implements EnlargeListener {
+	public int loopCount = 20;
 	public double r1, r2, i1, i2;
 	public int width, height;
 	public BufferedImage buffimg;

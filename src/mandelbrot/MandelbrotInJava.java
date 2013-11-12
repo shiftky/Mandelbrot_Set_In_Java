@@ -67,29 +67,29 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    	    	    	gl_buttonPanel.createParallelGroup(Alignment.LEADING)
 	    	    	    		.addGroup(gl_buttonPanel.createSequentialGroup()
 	    	    	    			.addContainerGap()
-	    	    	    			.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
-	    	    	    			.addContainerGap(457, Short.MAX_VALUE))
+	    	    	    			.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+	    	    	    			.addContainerGap(454, Short.MAX_VALUE))
 	    	    	    );
 	    	    	    gl_buttonPanel.setVerticalGroup(
-	    	    	    	gl_buttonPanel.createParallelGroup(Alignment.LEADING)
-	    	    	    		.addGroup(gl_buttonPanel.createSequentialGroup()
+	    	    	    	gl_buttonPanel.createParallelGroup(Alignment.TRAILING)
+	    	    	    		.addGroup(Alignment.LEADING, gl_buttonPanel.createSequentialGroup()
 	    	    	    			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 	    	    	    			.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 	    	    	    );
 	    	    	    buttonPanel.setLayout(gl_buttonPanel);
 	    	    	    
-	    	    	    	    // event listener
-	    	    	    	    btnReset.addActionListener(new ActionListener() {
-	    	    	    	    	public void actionPerformed(ActionEvent arg0) {
-	    	    	    	    		mandelbrotPanel.reset();
-	    	    	    	    	}
-	    	    	    	    });
-	    	    	    	    
-	    	    	    	    	    btnSave.addMouseListener(new MouseAdapter() {
-	    	    	    	    	    	public void mouseClicked(MouseEvent arg0) {
-	    	    	    	    	    		mandelbrotPanel.save();
-	    	    	    	    	    	}
-	    	    	    	    	    });
+	    	    	    // event listener
+	    	    	    btnReset.addActionListener(new ActionListener() {
+	    	    	    	public void actionPerformed(ActionEvent arg0) {
+	    	    	    		mandelbrotPanel.reset();
+	    	    	    	}
+	    	    	    });
+	    	    
+	    	    	    btnSave.addMouseListener(new MouseAdapter() {
+	    	    	    	public void mouseClicked(MouseEvent arg0) {
+	    	    	    		mandelbrotPanel.save();
+	    	    	    	}
+	    	    	    });
 	    	    	    
 	    	    	    
 	    	    	    // Mandelbrot set panel
@@ -176,23 +176,29 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    lblLoop = new JLabel("Loop: ");
 	    loopPanel.add(lblLoop);
 	    
-	    loopValueLabel = new JLabel("9999");
+	    loopValueLabel = new JLabel("20");
 	    loopValueLabel.setPreferredSize(new Dimension(40, 10));
 	    loopPanel.add(loopValueLabel);
 	    
 	    loopSlider = new JSlider();
+	    loopSlider.addMouseListener(new MouseAdapter() {
+	    	public void mouseReleased(MouseEvent e) {
+	    		mandelbrotPanel.draw();
+	    	}
+	    });
+	    loopSlider.setValue(20);
 	    loopSlider.setMinimum(10);
 	    loopSlider.setMaximum(1000);
 	    loopSlider.addChangeListener(new ChangeListener() {
 	    	public void stateChanged(ChangeEvent e) {
 	    		int val = 10 * (loopSlider.getValue() / 10);
 	    		loopValueLabel.setText(Integer.toString(val));
+	    		mandelbrotPanel.loopCount = val;
 	    	}
 	    });
 	    loopPanel.add(loopSlider);
-	    loopSlider.setValue(20);
 	    	    	    
-	    	    	    		mandelbrotPanel.draw();
+   		mandelbrotPanel.draw();
 	}
 	
 	protected void windowSettings(String title, int width, int height) {
