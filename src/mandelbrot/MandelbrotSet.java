@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
+import mandelbrot.events.EnlargeListener;
+
 class MandelbrotSet extends JPanel implements EnlargeListener {
 	public double r1, r2, i1, i2;
 	public int width, height;

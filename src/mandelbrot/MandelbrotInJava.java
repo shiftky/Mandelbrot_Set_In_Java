@@ -4,6 +4,10 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+
+import mandelbrot.events.MouseMovedListener;
 
 public class MandelbrotInJava extends JFrame implements MouseMovedListener {
 	MandelbrotSet mandelbrotSet;
@@ -14,6 +18,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener {
 	private JLabel lblIm;
 	private JLabel lblReValue;
 	private JLabel lblImValue;
+	private JPanel lblPanel;
 	
 	public MandelbrotInJava(String title){
 		int width = 640, height = 680;
@@ -43,21 +48,46 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener {
 
 	    // status panel
 	    statusPanel = new JPanel();
-	    statusPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-	    
-	    lblRe = new JLabel("Re: ");
-	    lblReValue = new JLabel("0.000000");
-	    lblIm = new JLabel("  Im: ");
-	    lblImValue = new JLabel("0.000000");
-	    statusPanel.add(lblRe);
-	    statusPanel.add(lblReValue);
-	    statusPanel.add(lblIm);
-	    statusPanel.add(lblImValue);
 
 	    // add panels
 	    getContentPane().add(operationPanel, BorderLayout.NORTH);
 	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
 	    getContentPane().add(statusPanel, BorderLayout.SOUTH);
+	    
+	    lblPanel = new JPanel();
+	    FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
+	    flowLayout.setVgap(0);
+	    
+	    lblRe = new JLabel("Re: ");
+	    lblPanel.add(lblRe);
+	    lblReValue = new JLabel("0.000000");
+	    lblPanel.add(lblReValue);
+	    lblIm = new JLabel("  Im: ");
+	    lblPanel.add(lblIm);
+	    lblImValue = new JLabel("0.000000");
+	    lblPanel.add(lblImValue);
+	    
+	    JProgressBar progressBar = new JProgressBar();
+	    GroupLayout gl_statusPanel = new GroupLayout(statusPanel);
+	    gl_statusPanel.setHorizontalGroup(
+	    	gl_statusPanel.createParallelGroup(Alignment.LEADING)
+	    		.addGroup(Alignment.TRAILING, gl_statusPanel.createSequentialGroup()
+	    			.addGap(20)
+	    			.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+	    			.addPreferredGap(ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+	    			.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+	    			.addGap(20))
+	    );
+	    gl_statusPanel.setVerticalGroup(
+	    	gl_statusPanel.createParallelGroup(Alignment.LEADING)
+	    		.addGroup(gl_statusPanel.createSequentialGroup()
+	    			.addContainerGap()
+	    			.addGroup(gl_statusPanel.createParallelGroup(Alignment.TRAILING)
+	    				.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+	    				.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	    			.addContainerGap(12, Short.MAX_VALUE))
+	    );
+	    statusPanel.setLayout(gl_statusPanel);
 	    
 	    // event listener
 	    btnReset.addActionListener(new ActionListener() {

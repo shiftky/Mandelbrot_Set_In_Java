@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.events;
 
 import java.util.EventListener;
 

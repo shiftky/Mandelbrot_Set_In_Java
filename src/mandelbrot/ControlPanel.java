@@ -4,10 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import javax.swing.JPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import javax.swing.JPanel;
+
+import mandelbrot.events.EnlargeListener;
+import mandelbrot.events.MouseMovedListener;
 
 public class ControlPanel extends JPanel {
 	private EnlargeListener enlargeListener = null;
