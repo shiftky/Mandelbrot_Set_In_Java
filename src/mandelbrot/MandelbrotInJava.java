@@ -25,11 +25,18 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	private JPanel lblPanel;
 	private JProgressBar progressBar;
 	private JPanel btnPanel;
+	private JPanel sliderPanel;
+	private JSlider loopSlider;
+	private JSlider colorSlider;
+	private JLabel lblLoop;
+	private JLabel lblColor;
+	private JTextField colorTextField;
+	private JTextField loopTextField;
 	
 	public MandelbrotInJava(String title){
-		int width = 640, height = 680;
+		int width = 640, height = 760;
 		int scr_width = width - 40;
-		int scr_height = height - 80;
+		int scr_height = height - 160;
 
 		windowSettings(title, width, height);
 
@@ -72,11 +79,15 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    mandelbrotPanel.add(ctrlPanel, BorderLayout.CENTER);
 	    graphicsPanel.add(mandelbrotPanel);
 	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
+	    
+	    JPanel parameterPanel = new JPanel();
+	    getContentPane().add(parameterPanel, BorderLayout.SOUTH);
+	    parameterPanel.setLayout(new BorderLayout(0, 0));
 
 	    // status panel
 	    lblPanel = new JPanel();
 	    FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
-	    flowLayout.setVgap(0);
+	    flowLayout.setVgap(2);
 	    lblRe = new JLabel("Re: ");
 	    lblPanel.add(lblRe);
 	    lblReValue = new JLabel("0.000000000000");
@@ -90,27 +101,60 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    progressBar.setValue(0);
     
 	    statusPanel = new JPanel();
+	    parameterPanel.add(statusPanel, BorderLayout.NORTH);
 	    GroupLayout gl_statusPanel = new GroupLayout(statusPanel);
 	    gl_statusPanel.setHorizontalGroup(
-	    	gl_statusPanel.createParallelGroup(Alignment.LEADING)
-	    		.addGroup(Alignment.TRAILING, gl_statusPanel.createSequentialGroup()
+	    	gl_statusPanel.createParallelGroup(Alignment.TRAILING)
+	    		.addGroup(Alignment.LEADING, gl_statusPanel.createSequentialGroup()
 	    			.addGap(20)
 	    			.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-	    			.addPreferredGap(ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
-	    			.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+	    			.addPreferredGap(ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+	    			.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 263, GroupLayout.PREFERRED_SIZE)
 	    			.addGap(20))
 	    );
 	    gl_statusPanel.setVerticalGroup(
 	    	gl_statusPanel.createParallelGroup(Alignment.LEADING)
 	    		.addGroup(gl_statusPanel.createSequentialGroup()
-	    			.addContainerGap()
-	    			.addGroup(gl_statusPanel.createParallelGroup(Alignment.TRAILING)
-	    				.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-	    				.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-	    			.addContainerGap(12, Short.MAX_VALUE))
+	    			.addGap(10)
+	    			.addGroup(gl_statusPanel.createParallelGroup(Alignment.LEADING)
+	    				.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+	    				.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	    			.addContainerGap(8, Short.MAX_VALUE))
 	    );
 	    statusPanel.setLayout(gl_statusPanel);
-	    getContentPane().add(statusPanel, BorderLayout.SOUTH);
+	    
+	    sliderPanel = new JPanel();
+	    parameterPanel.add(sliderPanel, BorderLayout.SOUTH);
+	    
+	    JPanel colorPanel = new JPanel();
+	    sliderPanel.add(colorPanel);
+	    
+	    lblColor = new JLabel("Color");
+	    colorPanel.add(lblColor);
+	    
+	    colorTextField = new JTextField();
+	    colorTextField.setText("0");
+	    colorPanel.add(colorTextField);
+	    colorTextField.setColumns(3);
+	    
+	    colorSlider = new JSlider();
+	    colorPanel.add(colorSlider);
+	    colorSlider.setValue(0);
+	    
+	    JPanel loopPanel = new JPanel();
+	    sliderPanel.add(loopPanel);
+	    
+	    lblLoop = new JLabel("Loop");
+	    loopPanel.add(lblLoop);
+	    
+	    loopTextField = new JTextField();
+	    loopTextField.setText("20");
+	    loopPanel.add(loopTextField);
+	    loopTextField.setColumns(3);
+	    
+	    loopSlider = new JSlider();
+	    loopPanel.add(loopSlider);
+	    loopSlider.setValue(20);
 
 	    // event listener
 	    btnReset.addActionListener(new ActionListener() {
