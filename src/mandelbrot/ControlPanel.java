@@ -64,12 +64,14 @@ public class ControlPanel extends JPanel {
 			y1 = mouse_y1;
 			y2 = mouse_y2;
 		}
-
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.white);
-		g2d.drawLine(start_x-5, start_y, start_x+5, start_y);
-		g2d.drawLine(start_x, start_y-5, start_x, start_y+5);
-		g2d.drawRect(x1, y1 , y2 - y1, y2 - y1);
+		
+		if (start_x > 0 && start_y > 0) {
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(Color.white);
+			g2d.drawLine(start_x-5, start_y, start_x+5, start_y);
+			g2d.drawLine(start_x, start_y-5, start_x, start_y+5);
+			g2d.drawRect(x1, y1 , y2 - y1, y2 - y1);
+		}
 	}
 
 	class inMouseMotionListener extends MouseMotionAdapter{
