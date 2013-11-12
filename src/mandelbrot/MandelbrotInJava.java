@@ -12,7 +12,7 @@ import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.MouseMovedListener;
 
 public class MandelbrotInJava extends JFrame implements MouseMovedListener, ChangeProgressListener {
-	MandelbrotPanel mandelbrotSet;
+	MandelbrotPanel mandelbrotPanel;
 	ControlPanel ctrlPanel;
 	JCheckBox chckbxShowAxes;
 	private JPanel statusPanel;
@@ -23,17 +23,16 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	private JPanel lblPanel;
 	private JProgressBar progressBar;
 	
+	protected void createOperatoinPanel(){
+		
+	}
+
 	public MandelbrotInJava(String title){
 		int width = 640, height = 680;
 		int scr_width = width - 40;
 		int scr_height = height - 80;
 
-		// window settings
-		setTitle(title);
-		setSize(width, height);
-		setResizable(false);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		windowSettings(title, width, height);
 
 		// operation panel
 	    JPanel operationPanel = new JPanel();
@@ -42,27 +41,19 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 
 	    // Mandelbrot set panel
 	    JPanel graphicsPanel = new JPanel();
-	    mandelbrotSet = new MandelbrotPanel(scr_width, scr_height);
-	    mandelbrotSet.setChangeProgressListener(this);
-	    mandelbrotSet.setVisible(false);
+	    mandelbrotPanel = new MandelbrotPanel(scr_width, scr_height);
+	    mandelbrotPanel.setChangeProgressListener(this);
+	    mandelbrotPanel.setVisible(false);
 	    ctrlPanel = new ControlPanel(scr_width, scr_height);
-	    ctrlPanel.setEnlergeListener(mandelbrotSet);
+	    ctrlPanel.setEnlergeListener(mandelbrotPanel);
 	    ctrlPanel.setMouseMovedListener(this);
-	    mandelbrotSet.add(ctrlPanel, BorderLayout.CENTER);
-	    graphicsPanel.add(mandelbrotSet);
+	    mandelbrotPanel.add(ctrlPanel, BorderLayout.CENTER);
+	    graphicsPanel.add(mandelbrotPanel);
 
 	    // status panel
-	    statusPanel = new JPanel();
-
-	    // add panels
-	    getContentPane().add(operationPanel, BorderLayout.NORTH);
-	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
-	    getContentPane().add(statusPanel, BorderLayout.SOUTH);
-	    
 	    lblPanel = new JPanel();
 	    FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
 	    flowLayout.setVgap(0);
-	    
 	    lblRe = new JLabel("Re: ");
 	    lblPanel.add(lblRe);
 	    lblReValue = new JLabel("0.000000000000");
@@ -74,6 +65,8 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    
 	    progressBar = new JProgressBar();
 	    progressBar.setValue(0);
+
+	    statusPanel = new JPanel();
 	    GroupLayout gl_statusPanel = new GroupLayout(statusPanel);
 	    gl_statusPanel.setHorizontalGroup(
 	    	gl_statusPanel.createParallelGroup(Alignment.LEADING)
@@ -94,19 +87,33 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    			.addContainerGap(12, Short.MAX_VALUE))
 	    );
 	    statusPanel.setLayout(gl_statusPanel);
+
+	    // add panels
+	    getContentPane().add(operationPanel, BorderLayout.NORTH);
+	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
+	    getContentPane().add(statusPanel, BorderLayout.SOUTH);
 	    
 	    // event listener
 	    btnReset.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
-	    		mandelbrotSet.reset();
+	    		mandelbrotPanel.reset();
 	    	}
 	    });
-		mandelbrotSet.draw();
+
+		mandelbrotPanel.draw();
+	}
+	
+	protected void windowSettings(String title, int width, int height) {
+		setTitle(title);
+		setSize(width, height);
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public void changeCursorPosition(int x, int y) {
-		double real = Utils.map(x, 0.0, mandelbrotSet.width, mandelbrotSet.r1, mandelbrotSet.r2);
-		double img = Utils.map(y, 0.0, mandelbrotSet.width, mandelbrotSet.r1, mandelbrotSet.r2);
+		double real = Utils.map(x, 0.0, mandelbrotPanel.width, mandelbrotPanel.r1, mandelbrotPanel.r2);
+		double img = Utils.map(y, 0.0, mandelbrotPanel.width, mandelbrotPanel.r1, mandelbrotPanel.r2);
 		lblReValue.setText(String.format("%.012f", real));
 		lblImValue.setText(String.format("%.012f", img));
 	}
