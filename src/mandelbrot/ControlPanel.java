@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 public class ControlPanel extends JPanel {
-	public boolean drawAxes = false;
 	private EnlargeListener enlargeListener = null;
 	private MouseMovedListener mouseMovedListener = null;
 	private int width, height;
@@ -41,19 +40,7 @@ public class ControlPanel extends JPanel {
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.white);
-		g2d.drawRect(x1, y1 , x2 - x1, y2 - y1);
-
-		if (drawAxes){
-			drawAxesLine(g2d);
-		}
-	}
-
-	public void drawAxesLine(Graphics2D g2d){
-		int x = (int) Utils.map(0.0, -2.0, 1.0, 0.0, width);
-		int y = (int) Utils.map(0.0, -1.5, 1.5, 0.0, height);
-		g2d.setColor(Color.white);
-		g2d.drawLine(x, 0, x, height);
-		g2d.drawLine(0, y, width, y);
+		g2d.drawRect(x1, y1 , y2 - y1, y2 - y1);
 	}
 
 	class inMouseMotionListener extends MouseMotionAdapter{
@@ -76,7 +63,7 @@ public class ControlPanel extends JPanel {
 		}
 		
 		public void mouseReleased(MouseEvent e){
-			enlargeListener.changeDrawingArea(x1, x2, y1, y2);
+			enlargeListener.changeDrawingArea(x1, x1+(y2-y1), y1, y2);
 			initMousePoint();
 			repaint();
 		}

@@ -1,8 +1,6 @@
 package mandelbrot;
 
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
@@ -18,7 +16,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener {
 	private JLabel lblImValue;
 	
 	public MandelbrotInJava(String title){
-		int width = 640, height = 620;
+		int width = 640, height = 680;
 		int scr_width = width - 40;
 		int scr_height = height - 80;
 
@@ -32,9 +30,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener {
 		// operation panel
 	    JPanel operationPanel = new JPanel();
 	    JButton btnReset = new JButton("Reset");
-	    chckbxShowAxes = new JCheckBox("show axes");
 	    operationPanel.add(btnReset);
-	    operationPanel.add(chckbxShowAxes);
 
 	    // Mandelbrot set panel
 	    JPanel graphicsPanel = new JPanel();
@@ -64,13 +60,6 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener {
 	    getContentPane().add(statusPanel, BorderLayout.SOUTH);
 	    
 	    // event listener
-	    chckbxShowAxes.addItemListener(new ItemListener() {
-	      	public void itemStateChanged(ItemEvent arg0) {
-	    		ctrlPanel.drawAxes = chckbxShowAxes.isSelected();
-	    		ctrlPanel.repaint();
-	    	}   	
-	    });
-
 	    btnReset.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		mandelbrotSet.reset();
