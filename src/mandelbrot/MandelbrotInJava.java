@@ -10,8 +10,15 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.MouseMovedListener;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class MandelbrotInJava extends JFrame implements MouseMovedListener, ChangeProgressListener {
 	MandelbrotPanel mandelbrotPanel;
@@ -24,14 +31,14 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	private JLabel lblImValue;
 	private JPanel lblPanel;
 	private JProgressBar progressBar;
-	private JPanel btnPanel;
+	private JPanel mainBtnPanel;
 	private JPanel sliderPanel;
 	private JSlider loopSlider;
 	private JSlider colorSlider;
 	private JLabel lblLoop;
 	private JLabel lblColor;
-	private JTextField colorTextField;
-	private JTextField loopTextField;
+	private JLabel colorValueLabel;
+	private JLabel loopValueLabel;
 	
 	public MandelbrotInJava(String title){
 		int width = 640, height = 760;
@@ -39,67 +46,84 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 		int scr_height = height - 160;
 
 		windowSettings(title, width, height);
-
-		// operation panel
+	    
 	    JPanel operationPanel = new JPanel();
 	    getContentPane().add(operationPanel, BorderLayout.NORTH);
-
-	    btnPanel = new JPanel();
-	    FlowLayout flowLayout_1 = (FlowLayout) btnPanel.getLayout();
-	    flowLayout_1.setVgap(2);
-	    JButton btnReset = new JButton("Reset");
-	    btnPanel.add(btnReset);
-	    JButton btnSave = new JButton("Save");
-	    btnPanel.add(btnSave);
-	    GroupLayout gl_operationPanel = new GroupLayout(operationPanel);
-	    gl_operationPanel.setHorizontalGroup(
-	    	gl_operationPanel.createParallelGroup(Alignment.LEADING)
-	    		.addGroup(gl_operationPanel.createSequentialGroup()
-	    			.addContainerGap()
-	    			.addComponent(btnPanel, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
-	    			.addContainerGap(457, Short.MAX_VALUE))
-	    );
-	    gl_operationPanel.setVerticalGroup(
-	    	gl_operationPanel.createParallelGroup(Alignment.LEADING)
-	    		.addGroup(gl_operationPanel.createSequentialGroup()
-	    			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	    			.addComponent(btnPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-	    );
-	    operationPanel.setLayout(gl_operationPanel);
+	    	    operationPanel.setLayout(new BorderLayout(0, 0));
 	    
-	    
-	    // Mandelbrot set panel
-	    JPanel graphicsPanel = new JPanel();
-	    mandelbrotPanel = new MandelbrotPanel(scr_width, scr_height);
-	    mandelbrotPanel.setChangeProgressListener(this);
-	    mandelbrotPanel.setVisible(false);
-	    ctrlPanel = new ControlPanel(scr_width, scr_height);
-	    ctrlPanel.setEnlergeListener(mandelbrotPanel);
-	    ctrlPanel.setMouseMovedListener(this);
-	    mandelbrotPanel.add(ctrlPanel, BorderLayout.CENTER);
-	    graphicsPanel.add(mandelbrotPanel);
-	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
-	    
-	    JPanel parameterPanel = new JPanel();
-	    getContentPane().add(parameterPanel, BorderLayout.SOUTH);
-	    parameterPanel.setLayout(new BorderLayout(0, 0));
-
-	    // status panel
-	    lblPanel = new JPanel();
-	    FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
-	    flowLayout.setVgap(2);
-	    lblRe = new JLabel("Re: ");
-	    lblPanel.add(lblRe);
-	    lblReValue = new JLabel("0.000000000000");
-	    lblPanel.add(lblReValue);
-	    lblIm = new JLabel("  Im: ");
-	    lblPanel.add(lblIm);
-	    lblImValue = new JLabel("0.000000000000");
-	    lblPanel.add(lblImValue);
-	    
-	    progressBar = new JProgressBar();
-	    progressBar.setValue(0);
-    
+	    		// operation panel
+	    	    JPanel buttonPanel = new JPanel();
+	    	    operationPanel.add(buttonPanel, BorderLayout.NORTH);
+	    	    
+	    	    	    mainBtnPanel = new JPanel();
+	    	    	    FlowLayout fl_mainBtnPanel = (FlowLayout) mainBtnPanel.getLayout();
+	    	    	    fl_mainBtnPanel.setVgap(2);
+	    	    	    JButton btnReset = new JButton("Reset");
+	    	    	    mainBtnPanel.add(btnReset);
+	    	    	    JButton btnSave = new JButton("Save");
+	    	    	    mainBtnPanel.add(btnSave);
+	    	    	    GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
+	    	    	    gl_buttonPanel.setHorizontalGroup(
+	    	    	    	gl_buttonPanel.createParallelGroup(Alignment.LEADING)
+	    	    	    		.addGroup(gl_buttonPanel.createSequentialGroup()
+	    	    	    			.addContainerGap()
+	    	    	    			.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+	    	    	    			.addContainerGap(457, Short.MAX_VALUE))
+	    	    	    );
+	    	    	    gl_buttonPanel.setVerticalGroup(
+	    	    	    	gl_buttonPanel.createParallelGroup(Alignment.LEADING)
+	    	    	    		.addGroup(gl_buttonPanel.createSequentialGroup()
+	    	    	    			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	    	    	    			.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+	    	    	    );
+	    	    	    buttonPanel.setLayout(gl_buttonPanel);
+	    	    	    
+	    	    	    	    // event listener
+	    	    	    	    btnReset.addActionListener(new ActionListener() {
+	    	    	    	    	public void actionPerformed(ActionEvent arg0) {
+	    	    	    	    		mandelbrotPanel.reset();
+	    	    	    	    	}
+	    	    	    	    });
+	    	    	    	    
+	    	    	    	    	    btnSave.addMouseListener(new MouseAdapter() {
+	    	    	    	    	    	public void mouseClicked(MouseEvent arg0) {
+	    	    	    	    	    		mandelbrotPanel.save();
+	    	    	    	    	    	}
+	    	    	    	    	    });
+	    	    	    
+	    	    	    
+	    	    	    // Mandelbrot set panel
+	    	    	    JPanel graphicsPanel = new JPanel();
+	    	    	    mandelbrotPanel = new MandelbrotPanel(scr_width, scr_height);
+	    	    	    mandelbrotPanel.setChangeProgressListener(this);
+	    	    	    mandelbrotPanel.setVisible(false);
+	    	    	    ctrlPanel = new ControlPanel(scr_width, scr_height);
+	    	    	    ctrlPanel.setEnlergeListener(mandelbrotPanel);
+	    	    	    ctrlPanel.setMouseMovedListener(this);
+	    	    	    mandelbrotPanel.add(ctrlPanel, BorderLayout.CENTER);
+	    	    	    graphicsPanel.add(mandelbrotPanel);
+	    	    	    getContentPane().add(graphicsPanel, BorderLayout.CENTER);
+	    	    	    
+	    	    	    JPanel parameterPanel = new JPanel();
+	    	    	    getContentPane().add(parameterPanel, BorderLayout.SOUTH);
+	    	    	    parameterPanel.setLayout(new BorderLayout(0, 0));
+	    	    	    
+	    	    	    	    // status panel
+	    	    	    	    lblPanel = new JPanel();
+	    	    	    	    FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
+	    	    	    	    flowLayout.setVgap(2);
+	    	    	    	    lblRe = new JLabel("Re: ");
+	    	    	    	    lblPanel.add(lblRe);
+	    	    	    	    lblReValue = new JLabel("0.000000000000");
+	    	    	    	    lblPanel.add(lblReValue);
+	    	    	    	    lblIm = new JLabel("  Im: ");
+	    	    	    	    lblPanel.add(lblIm);
+	    	    	    	    lblImValue = new JLabel("0.000000000000");
+	    	    	    	    lblPanel.add(lblImValue);
+	    	    	    	    
+	    	    	    	    progressBar = new JProgressBar();
+	    	    	    	    progressBar.setValue(0);
+	    	    	    	    
 	    statusPanel = new JPanel();
 	    parameterPanel.add(statusPanel, BorderLayout.NORTH);
 	    GroupLayout gl_statusPanel = new GroupLayout(statusPanel);
@@ -129,47 +153,46 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener, Chan
 	    JPanel colorPanel = new JPanel();
 	    sliderPanel.add(colorPanel);
 	    
-	    lblColor = new JLabel("Color");
+	    lblColor = new JLabel("Color: ");
 	    colorPanel.add(lblColor);
 	    
-	    colorTextField = new JTextField();
-	    colorTextField.setText("0");
-	    colorPanel.add(colorTextField);
-	    colorTextField.setColumns(3);
+	    colorValueLabel = new JLabel("999");
+	    colorValueLabel.setPreferredSize(new Dimension(40, 10));
+	    colorPanel.add(colorValueLabel);
 	    
 	    colorSlider = new JSlider();
+	    colorSlider.addChangeListener(new ChangeListener() {
+	    	public void stateChanged(ChangeEvent arg0) {
+	    		colorValueLabel.setText(Integer.toString(colorSlider.getValue()));
+	    	}
+	    });
 	    colorPanel.add(colorSlider);
 	    colorSlider.setValue(0);
 	    
 	    JPanel loopPanel = new JPanel();
+	    FlowLayout flowLayout_2 = (FlowLayout) loopPanel.getLayout();
 	    sliderPanel.add(loopPanel);
 	    
-	    lblLoop = new JLabel("Loop");
+	    lblLoop = new JLabel("Loop: ");
 	    loopPanel.add(lblLoop);
 	    
-	    loopTextField = new JTextField();
-	    loopTextField.setText("20");
-	    loopPanel.add(loopTextField);
-	    loopTextField.setColumns(3);
+	    loopValueLabel = new JLabel("9999");
+	    loopValueLabel.setPreferredSize(new Dimension(40, 10));
+	    loopPanel.add(loopValueLabel);
 	    
 	    loopSlider = new JSlider();
+	    loopSlider.setMinimum(10);
+	    loopSlider.setMaximum(1000);
+	    loopSlider.addChangeListener(new ChangeListener() {
+	    	public void stateChanged(ChangeEvent e) {
+	    		int val = 10 * (loopSlider.getValue() / 10);
+	    		loopValueLabel.setText(Integer.toString(val));
+	    	}
+	    });
 	    loopPanel.add(loopSlider);
 	    loopSlider.setValue(20);
-
-	    // event listener
-	    btnReset.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent arg0) {
-	    		mandelbrotPanel.reset();
-	    	}
-	    });
-
-	    btnSave.addMouseListener(new MouseAdapter() {
-	    	public void mouseClicked(MouseEvent arg0) {
-	    		mandelbrotPanel.save();
-	    	}
-	    });
-
-		mandelbrotPanel.draw();
+	    	    	    
+	    	    	    		mandelbrotPanel.draw();
 	}
 	
 	protected void windowSettings(String title, int width, int height) {
