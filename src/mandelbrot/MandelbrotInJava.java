@@ -187,13 +187,12 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 		colorSlider.setValue(0);
 
 		JPanel loopPanel = new JPanel();
-		FlowLayout flowLayout_2 = (FlowLayout) loopPanel.getLayout();
 		sliderPanel.add(loopPanel);
 
 		lblLoop = new JLabel("Loop: ");
 		loopPanel.add(lblLoop);
 
-		loopValueLabel = new JLabel("20");
+		loopValueLabel = new JLabel("30");
 		loopValueLabel.setPreferredSize(new Dimension(40, 10));
 		loopPanel.add(loopValueLabel);
 
@@ -203,7 +202,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 				mandelbrotPanel.draw();
 			}
 		});
-		loopSlider.setValue(20);
+		loopSlider.setValue(30);
 		loopSlider.setMinimum(10);
 		loopSlider.setMaximum(1000);
 		loopSlider.addChangeListener(new ChangeListener() {

@@ -38,7 +38,9 @@ public class DrawThread extends Thread {
 			for (int y=0; y<height; y++){
 				Complex c = new Complex(Utils.map((double) x, 0.0, (double) width, r1, r2),
 									    Utils.map((double) y, 0.0, (double) height, i1, i2));
-				bfg.setColor(new Color(102, 153, 255));
+
+				bfg.setColor(colorGenerator());
+
 				if (Mandelbrot.mandel(c, loopCount) == true){
 			        bfg.fillRect(x, y, 1, 1);
 				}
@@ -49,8 +51,16 @@ public class DrawThread extends Thread {
 				}
 			}
 		}
+
 		prog_cnt = 0;
 		panel.repaint();
-		panel.setVisible(true);
+
+		if ( panel.isVisible() == false ) { 
+			panel.setVisible(true);
+		}
+	}
+	
+	private Color colorGenerator() {
+		return new Color(102, 153, 255);
 	}
 }
