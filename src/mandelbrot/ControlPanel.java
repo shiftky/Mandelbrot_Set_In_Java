@@ -115,6 +115,11 @@ public class ControlPanel extends JPanel {
 		}
 		
 		public void mouseReleased(MouseEvent e){
+			if ( x1 == x2 && y1 == y2 ) {
+				initMousePoint();
+				repaint();
+				return;
+			}
 			enlargeListener.changeDrawingArea(x1, x1+(y2-y1), y1, y2);
 			initMousePoint();
 		}
