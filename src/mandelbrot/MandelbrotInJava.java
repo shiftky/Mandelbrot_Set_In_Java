@@ -128,6 +128,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 
 		progressBar = new JProgressBar();
 		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
 
 		statusPanel = new JPanel();
 		parameterPanel.add(statusPanel, BorderLayout.NORTH);
@@ -189,7 +190,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 		JPanel loopPanel = new JPanel();
 		sliderPanel.add(loopPanel);
 
-		lblLoop = new JLabel("Loop: ");
+		lblLoop = new JLabel("Iterations: ");
 		loopPanel.add(lblLoop);
 
 		loopValueLabel = new JLabel("30");
@@ -237,6 +238,11 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 	public void changeProgress(int value) {
 		if (progressBar != null) {
 			progressBar.setValue(value);
+			if ( value == progressBar.getMaximum() ){
+				progressBar.setString("");
+			} else {
+				progressBar.setString("Rendering... " + value + "%");
+			}
 		}
 	}
 

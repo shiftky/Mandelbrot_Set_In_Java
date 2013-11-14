@@ -1,18 +1,18 @@
 package mandelbrot;
 
 public class Mandelbrot {
-	public static boolean mandel(Complex z, int max){
-		int score = 0;
+	public static int mandel(Complex z, int max){
 		Complex c = new Complex(z.re, z.im);
 
+		int score = 0;
 		while (score < max){
 			z = z.sqr();
 			z = z.add(c);
 			if (z.abs() >= 3.5){
-				return true;
+				break;
 			}
 			score += 1;
 		}
-		return false;
+		return score;
 	}
 }
