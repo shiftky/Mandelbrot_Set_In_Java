@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +20,13 @@ import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.EnlargeListener;
 
 class MandelbrotPanel extends JPanel implements EnlargeListener {
-	public int loopCount = 20;
+	public boolean smoothing = false;
 	public double r1, r2, i1, i2;
+	public int palette = 0;
+	public int loopCount = 30;
 	public int width, height;
 	public BufferedImage buffimg;
-	public Graphics bfg;
+	public Graphics2D bfg;
 	public ChangeProgressListener changeProgressListener = null;
 
 	public MandelbrotPanel(int w, int h){
@@ -41,8 +45,22 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 		this.changeProgressListener = listener;
 	}
 
+	public void changePalette() {
+		palette++;
+		if ( palette == 5 ){
+			palette = 0;
+		}
+		draw();
+	}
+	
+	public void setSmoothing(boolean b) {
+		smoothing = b;
+		draw();
+	}
+
 	public void paintComponent(Graphics g){
-		g.drawImage(buffimg, 0, 0, this);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.drawImage(buffimg, 0, 0, this);
 	}
 
 	public void draw(){

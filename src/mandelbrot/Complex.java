@@ -18,7 +18,7 @@ class Complex{
 	}
 	
 	public Complex sqr(){
-		return new Complex(this.re * this.re-this.im*this.im, 2*this.re*this.im);
+		return new Complex(this.re * this.re-this.im*this.im, 2.0*this.re*this.im);
 	}
 	
 	public double abs(){

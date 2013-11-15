@@ -35,16 +35,15 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 	private JPanel mainBtnPanel;
 	private JPanel sliderPanel;
 	private JSlider loopSlider;
-	private JSlider colorSlider;
 	private JLabel lblLoop;
-	private JLabel lblColor;
-	private JLabel colorValueLabel;
 	private JLabel loopValueLabel;
+	private JButton btnChangePalette;
+	private JCheckBox chckbxSmooth;
 
 	public MandelbrotInJava(String title) {
-		int width = 640, height = 760;
+		int width = 640, height = 740;
 		int scr_width = width - 40;
-		int scr_height = height - 160;
+		int scr_height = height - 140;
 
 		windowSettings(title, width, height);
 
@@ -99,6 +98,9 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 
 		// Mandelbrot set panel
 		JPanel graphicsPanel = new JPanel();
+		FlowLayout flowLayout_3 = (FlowLayout) graphicsPanel.getLayout();
+		flowLayout_3.setHgap(0);
+		flowLayout_3.setVgap(0);
 		mandelbrotPanel = new MandelbrotPanel(scr_width, scr_height);
 		mandelbrotPanel.setChangeProgressListener(this);
 		mandelbrotPanel.setVisible(false);
@@ -117,11 +119,11 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 		lblPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
 		flowLayout.setVgap(2);
-		lblRe = new JLabel("Re: ");
+		lblRe = new JLabel("Re:");
 		lblPanel.add(lblRe);
 		lblReValue = new JLabel("0.000000000000");
 		lblPanel.add(lblReValue);
-		lblIm = new JLabel("  Im: ");
+		lblIm = new JLabel(" Im:");
 		lblPanel.add(lblIm);
 		lblImValue = new JLabel("0.000000000000");
 		lblPanel.add(lblImValue);
@@ -133,87 +135,102 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 		statusPanel = new JPanel();
 		parameterPanel.add(statusPanel, BorderLayout.NORTH);
 		GroupLayout gl_statusPanel = new GroupLayout(statusPanel);
-		gl_statusPanel.setHorizontalGroup(gl_statusPanel.createParallelGroup(
-				Alignment.TRAILING).addGroup(
-				Alignment.LEADING,
-				gl_statusPanel
-						.createSequentialGroup()
-						.addGap(20)
-						.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 41,
-								Short.MAX_VALUE)
-						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE,
-								263, GroupLayout.PREFERRED_SIZE).addGap(20)));
-		gl_statusPanel.setVerticalGroup(gl_statusPanel.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_statusPanel
-						.createSequentialGroup()
-						.addGap(10)
-						.addGroup(
-								gl_statusPanel
-										.createParallelGroup(Alignment.LEADING)
-										.addComponent(progressBar,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblPanel,
-												GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(8, Short.MAX_VALUE)));
+		gl_statusPanel.setHorizontalGroup(
+			gl_statusPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_statusPanel.createSequentialGroup()
+					.addGap(20)
+					.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 281, GroupLayout.PREFERRED_SIZE)
+					.addGap(20))
+		);
+		gl_statusPanel.setVerticalGroup(
+			gl_statusPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_statusPanel.createSequentialGroup()
+					.addGap(10)
+					.addGroup(gl_statusPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(8, Short.MAX_VALUE))
+		);
 		statusPanel.setLayout(gl_statusPanel);
 
 		sliderPanel = new JPanel();
 		parameterPanel.add(sliderPanel, BorderLayout.SOUTH);
-
-		JPanel colorPanel = new JPanel();
-		sliderPanel.add(colorPanel);
-
-		lblColor = new JLabel("Color: ");
-		colorPanel.add(lblColor);
-
-		colorValueLabel = new JLabel("999");
-		colorValueLabel.setPreferredSize(new Dimension(40, 10));
-		colorPanel.add(colorValueLabel);
-
-		colorSlider = new JSlider();
-		colorSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				colorValueLabel.setText(Integer.toString(colorSlider.getValue()));
-			}
-		});
-		colorPanel.add(colorSlider);
-		colorSlider.setValue(0);
-
-		JPanel loopPanel = new JPanel();
-		sliderPanel.add(loopPanel);
-
-		lblLoop = new JLabel("Iterations: ");
-		loopPanel.add(lblLoop);
-
-		loopValueLabel = new JLabel("30");
-		loopValueLabel.setPreferredSize(new Dimension(40, 10));
-		loopPanel.add(loopValueLabel);
-
-		loopSlider = new JSlider();
-		loopSlider.addMouseListener(new MouseAdapter() {
-			public void mouseReleased(MouseEvent e) {
-				mandelbrotPanel.draw();
-			}
-		});
-		loopSlider.setValue(30);
-		loopSlider.setMinimum(10);
-		loopSlider.setMaximum(1000);
-		loopSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				int val = 10 * (loopSlider.getValue() / 10);
-				loopValueLabel.setText(Integer.toString(val));
-				mandelbrotPanel.loopCount = val;
-			}
-		});
-		loopPanel.add(loopSlider);
+				
+						JPanel colorPanel = new JPanel();
+						FlowLayout flowLayout_1 = (FlowLayout) colorPanel.getLayout();
+						flowLayout_1.setHgap(3);
+						flowLayout_1.setVgap(0);
+						
+						btnChangePalette = new JButton("ChangePalette");
+						btnChangePalette.addMouseListener(new MouseAdapter() {
+							public void mouseClicked(MouseEvent arg0) {
+								mandelbrotPanel.changePalette();
+							}
+						});
+						colorPanel.add(btnChangePalette);
+						
+						chckbxSmooth = new JCheckBox("smoothing");
+						chckbxSmooth.addMouseListener(new MouseAdapter() {
+							public void mouseClicked(MouseEvent e) {
+								mandelbrotPanel.setSmoothing(chckbxSmooth.isSelected());
+							}
+						});
+						chckbxSmooth.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+						colorPanel.add(chckbxSmooth);
+		
+				JPanel loopPanel = new JPanel();
+				FlowLayout flowLayout_2 = (FlowLayout) loopPanel.getLayout();
+				flowLayout_2.setHgap(0);
+				flowLayout_2.setVgap(0);
+				
+								lblLoop = new JLabel("Iterations: ");
+								lblLoop.setVerticalAlignment(SwingConstants.BOTTOM);
+								lblLoop.setPreferredSize(new Dimension(70, 17));
+								loopPanel.add(lblLoop);
+						
+								loopValueLabel = new JLabel("30");
+								loopValueLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+								loopValueLabel.setPreferredSize(new Dimension(35, 17));
+								loopPanel.add(loopValueLabel);
+								
+										loopSlider = new JSlider();
+										loopSlider.addMouseListener(new MouseAdapter() {
+											public void mouseReleased(MouseEvent e) {
+												mandelbrotPanel.draw();
+											}
+										});
+										loopSlider.setValue(30);
+										loopSlider.setMinimum(10);
+										loopSlider.setMaximum(1000);
+										loopSlider.addChangeListener(new ChangeListener() {
+											public void stateChanged(ChangeEvent e) {
+												int val = 10 * (loopSlider.getValue() / 10);
+												loopValueLabel.setText(Integer.toString(val));
+												mandelbrotPanel.loopCount = val;
+											}
+										});
+										loopPanel.add(loopSlider);
+										GroupLayout gl_sliderPanel = new GroupLayout(sliderPanel);
+										gl_sliderPanel.setHorizontalGroup(
+											gl_sliderPanel.createParallelGroup(Alignment.TRAILING)
+												.addGroup(gl_sliderPanel.createSequentialGroup()
+													.addGap(15)
+													.addComponent(colorPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+													.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+													.addComponent(loopPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+													.addContainerGap())
+										);
+										gl_sliderPanel.setVerticalGroup(
+											gl_sliderPanel.createParallelGroup(Alignment.LEADING)
+												.addGroup(gl_sliderPanel.createSequentialGroup()
+													.addGroup(gl_sliderPanel.createParallelGroup(Alignment.LEADING)
+														.addComponent(loopPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addComponent(colorPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+													.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+										);
+										sliderPanel.setLayout(gl_sliderPanel);
 
 		mandelbrotPanel.draw();
 	}
@@ -227,10 +244,8 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 	}
 
 	public void changeCursorPosition(int x, int y) {
-		double real = Utils.map(x, 0.0, mandelbrotPanel.width,
-				mandelbrotPanel.r1, mandelbrotPanel.r2);
-		double img = Utils.map(y, 0.0, mandelbrotPanel.width,
-				mandelbrotPanel.r1, mandelbrotPanel.r2);
+		double real = Utils.map(x, 0.0, mandelbrotPanel.width, mandelbrotPanel.r1, mandelbrotPanel.r2);
+		double img = Utils.map(y, 0.0, mandelbrotPanel.width, mandelbrotPanel.r1, mandelbrotPanel.r2);
 		lblReValue.setText(String.format("%.012f", real));
 		lblImValue.setText(String.format("%.012f", img));
 	}
