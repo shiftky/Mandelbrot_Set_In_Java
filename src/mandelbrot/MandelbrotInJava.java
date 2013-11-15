@@ -39,6 +39,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 	private JLabel loopValueLabel;
 	private JButton btnChangePalette;
 	private JCheckBox chckbxSmooth;
+	private JCheckBox chckbxAntialias;
 
 	public MandelbrotInJava(String title) {
 		int width = 640, height = 740;
@@ -171,7 +172,8 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 						});
 						colorPanel.add(btnChangePalette);
 						
-						chckbxSmooth = new JCheckBox("smoothing");
+						chckbxSmooth = new JCheckBox("smooth");
+						chckbxSmooth.setSelected(true);
 						chckbxSmooth.addMouseListener(new MouseAdapter() {
 							public void mouseClicked(MouseEvent e) {
 								mandelbrotPanel.setSmoothing(chckbxSmooth.isSelected());
@@ -215,21 +217,30 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 										GroupLayout gl_sliderPanel = new GroupLayout(sliderPanel);
 										gl_sliderPanel.setHorizontalGroup(
 											gl_sliderPanel.createParallelGroup(Alignment.TRAILING)
-												.addGroup(gl_sliderPanel.createSequentialGroup()
+												.addGroup(Alignment.LEADING, gl_sliderPanel.createSequentialGroup()
 													.addGap(15)
 													.addComponent(colorPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+													.addPreferredGap(ComponentPlacement.UNRELATED)
 													.addComponent(loopPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-													.addContainerGap())
+													.addContainerGap(8, Short.MAX_VALUE))
 										);
 										gl_sliderPanel.setVerticalGroup(
 											gl_sliderPanel.createParallelGroup(Alignment.LEADING)
 												.addGroup(gl_sliderPanel.createSequentialGroup()
 													.addGroup(gl_sliderPanel.createParallelGroup(Alignment.LEADING)
-														.addComponent(loopPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addComponent(colorPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+														.addComponent(colorPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addComponent(loopPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 													.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 										);
+										
+										chckbxAntialias = new JCheckBox("antialias");
+										chckbxAntialias.addMouseListener(new MouseAdapter() {
+											public void mouseClicked(MouseEvent e) {
+												mandelbrotPanel.setAntialiasing(chckbxAntialias.isSelected());
+											}
+										});
+										chckbxAntialias.setSelected(true);
+										colorPanel.add(chckbxAntialias);
 										sliderPanel.setLayout(gl_sliderPanel);
 
 		mandelbrotPanel.draw();

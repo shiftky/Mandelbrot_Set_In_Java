@@ -1,23 +1,30 @@
 package mandelbrot;
 
 public class Mandelbrot {
-	public static int mandel(Complex z, int max){
+	private int max;
+	
+	public Mandelbrot(int m) {
+		max = m;
+	}
+
+	public int calc(Complex z){
 		Complex c = new Complex(z.re, z.im);
-		double abs = z.abs();
-		int score = 0;
+		Complex z2 = new Complex();
 
-		while (abs < 3.5 && score < max){
-			z = z.sqr();
-			z = z.add(c);
-			abs = z.abs();
-			score++;
-		}
+	    int count = 0;
+	    while (z2.abs() < 4.0 && count < max) {
+	    	z = z.sqr();
+	    	z = z.add(c);
+	    	z2 = new Complex(z.re*z.re, z.im*z.im);
+	    	count++;
+	    }
 
-		if ( score == max ) {
-			return -1;
-		} else {
-			abs += 0.000000001;
-			return 256*score + (int)(255.0 * Math.log(3.5/abs) / Math.log((z.re*z.re + z.im*z.im) /abs));
+	    if (count == 0 || count == max) {
+	      return 0;
+	    } else {
+		    double zM2 = z.abs();
+		    zM2 += 0.000000001;
+		    return 256 * count + (int)(255.0 * Math.log(4 / zM2) / Math.log((z2.re + z2.im) / zM2));
 		}
 	}
 }

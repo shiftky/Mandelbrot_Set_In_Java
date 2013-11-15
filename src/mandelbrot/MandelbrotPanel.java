@@ -20,7 +20,9 @@ import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.EnlargeListener;
 
 class MandelbrotPanel extends JPanel implements EnlargeListener {
-	public boolean smoothing = false;
+	public boolean antialiasing = true;
+	public boolean smoothing = true;
+	public double viewX = 0.0, viewY = 0.0, zoom = 1.0;
 	public double r1, r2, i1, i2;
 	public int palette = 0;
 	public int loopCount = 30;
@@ -57,6 +59,11 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 		smoothing = b;
 		draw();
 	}
+	
+	public void setAntialiasing(boolean b) {
+		antialiasing = b;
+		draw();
+	}
 
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
@@ -76,6 +83,11 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 			double tmp_i2 = Utils.map((double) y2, 0.0, (double) height, i1, i2);
 			r1 = tmp_r1; r2 = tmp_r2;
 			i1 = tmp_i1; i2 = tmp_i2;
+			
+			viewX += zoom * Math.min(x2, x1) / Math.min(width, height);
+			viewY += zoom * Math.min(y2, y1) / Math.min(width, height);
+			zoom *= Math.max((double)Math.abs(x2-x1)/width, (double)Math.abs(y2-y1)/height);
+
 			draw();
 		}
 	}
@@ -97,5 +109,6 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 	private void initRange(){
 		r1 = -2.0; r2 = 1.0;
 		i1 = -1.5; i2 = 1.5;
+		viewX = viewY = zoom = 1.0;
 	}
 }
