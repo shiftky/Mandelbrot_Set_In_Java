@@ -13,10 +13,6 @@ import mandelbrot.events.MouseMovedListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
@@ -161,7 +157,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 				
 						JPanel colorPanel = new JPanel();
 						FlowLayout flowLayout_1 = (FlowLayout) colorPanel.getLayout();
-						flowLayout_1.setHgap(3);
+						flowLayout_1.setHgap(0);
 						flowLayout_1.setVgap(0);
 						
 						btnChangePalette = new JButton("ChangePalette");
@@ -172,7 +168,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 						});
 						colorPanel.add(btnChangePalette);
 						
-						chckbxSmooth = new JCheckBox("smooth");
+						chckbxSmooth = new JCheckBox("Smooth");
 						chckbxSmooth.setSelected(true);
 						chckbxSmooth.addMouseListener(new MouseAdapter() {
 							public void mouseClicked(MouseEvent e) {
@@ -233,13 +229,12 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 													.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 										);
 										
-										chckbxAntialias = new JCheckBox("antialias");
+										chckbxAntialias = new JCheckBox("Anti-alias");
 										chckbxAntialias.addMouseListener(new MouseAdapter() {
 											public void mouseClicked(MouseEvent e) {
 												mandelbrotPanel.setAntialiasing(chckbxAntialias.isSelected());
 											}
 										});
-										chckbxAntialias.setSelected(true);
 										colorPanel.add(chckbxAntialias);
 										sliderPanel.setLayout(gl_sliderPanel);
 

@@ -1,26 +1,20 @@
 package mandelbrot;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileFilter;
 
 import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.EnlargeListener;
 
 class MandelbrotPanel extends JPanel implements EnlargeListener {
-	public boolean antialiasing = true;
+	public boolean antialiasing = false;
 	public boolean smoothing = true;
 	public double viewX = 0.0, viewY = 0.0, zoom = 1.0;
 	public double r1, r2, i1, i2;
