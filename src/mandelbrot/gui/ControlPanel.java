@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;

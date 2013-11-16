@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.save;
 
 import javax.swing.filechooser.FileFilter;
 

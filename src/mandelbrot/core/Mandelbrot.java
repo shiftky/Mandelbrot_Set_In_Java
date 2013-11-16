@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.core;
 
 public class Mandelbrot {
 	private int max;

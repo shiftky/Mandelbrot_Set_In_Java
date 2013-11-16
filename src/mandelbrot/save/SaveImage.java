@@ -1,13 +1,14 @@
-package mandelbrot;
+package mandelbrot.save;
 
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
-import mandelbrot.ExtensionFileFilter;
+import mandelbrot.save.ExtensionFileFilter;
 
 public class SaveImage {
 	public static boolean save(BufferedImage buffimg, Component parent) throws IOException {

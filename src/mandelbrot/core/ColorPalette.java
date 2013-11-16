@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.core;
 
 import java.awt.Color;
 

@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,12 +11,15 @@ import java.util.Observable;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import mandelbrot.core.DrawThread;
 import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.DrawEndEvent;
 import mandelbrot.events.DrawStartEvent;
 import mandelbrot.events.EnlargeListener;
+import mandelbrot.save.SaveImage;
+import mandelbrot.utils.Utils;
 
-class MandelbrotPanel extends JPanel implements EnlargeListener {
+public class MandelbrotPanel extends JPanel implements EnlargeListener {
 	public ChangeProgressListener changeProgressListener = null;
 	public NotifyDrawEvent notifyDrawEvent;
 	public boolean antiAliasing = false;

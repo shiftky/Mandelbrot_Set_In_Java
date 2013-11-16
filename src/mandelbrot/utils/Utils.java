@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.utils;
 
 public class Utils {
 	public static double map(double value, double start1, double stop1, double start2, double stop2) {

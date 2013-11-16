@@ -1,6 +1,9 @@
-package mandelbrot;
+package mandelbrot.core;
 
 import java.awt.Color;
+
+import mandelbrot.gui.MandelbrotPanel;
+import mandelbrot.utils.Utils;
 
 public class DrawThread extends Thread {
 

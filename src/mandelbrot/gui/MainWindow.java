@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.gui;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -12,6 +12,7 @@ import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.DrawEndEvent;
 import mandelbrot.events.DrawStartEvent;
 import mandelbrot.events.MouseMovedListener;
+import mandelbrot.utils.Utils;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -21,7 +22,7 @@ import java.util.Observer;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-public class MandelbrotInJava extends JFrame implements MouseMovedListener,
+public class MainWindow extends JFrame implements MouseMovedListener,
 	ChangeProgressListener, Observer {
 	MandelbrotPanel mandelbrotPanel;
 	ControlPanel ctrlPanel;
@@ -44,7 +45,7 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 	private JCheckBox chckbxSmooth;
 	private JCheckBox chckbxAntialias;
 
-	public MandelbrotInJava(String title) {
+	public MainWindow(String title) {
 		int width = 640, height = 740;
 		int scr_width = width - 40;
 		int scr_height = height - 140;
@@ -292,10 +293,5 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 			chckbxSmooth.setEnabled(true);
 			chckbxAntialias.setEnabled(true);
 		}
-	}
-
-	public static void main(String[] args) {
-		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java");
-		mandelbrot.setVisible(true);
 	}
 }

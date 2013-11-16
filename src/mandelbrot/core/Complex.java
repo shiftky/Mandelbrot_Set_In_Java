@@ -1,4 +1,4 @@
-package mandelbrot;
+package mandelbrot.core;
 
 class Complex{
 	double re, im;
