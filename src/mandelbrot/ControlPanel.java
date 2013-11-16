@@ -7,13 +7,17 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JPanel;
 
+import mandelbrot.events.DrawEndEvent;
+import mandelbrot.events.DrawStartEvent;
 import mandelbrot.events.EnlargeListener;
 import mandelbrot.events.MouseMovedListener;
 
-public class ControlPanel extends JPanel {
+public class ControlPanel extends JPanel implements Observer {
 	private EnlargeListener enlargeListener = null;
 	private MouseMovedListener mouseMovedListener = null;
 	private int width, height;
@@ -21,10 +25,12 @@ public class ControlPanel extends JPanel {
 	private int x1, x2, y1, y2;
 	private int start_x, start_y;
 	private int old_mouse_y = -1;
+	private boolean enlargeEnabled;
 
 	public ControlPanel(int w, int h){
 		width = w;
 		height = h;
+
 		setOpaque(false);
 		setPreferredSize(new Dimension(width, height));
 		
@@ -80,15 +86,24 @@ public class ControlPanel extends JPanel {
 
 	class inMouseMotionListener extends MouseMotionAdapter{
 		public void mouseMoved(MouseEvent e){
-			mouseMovedListener.changeCursorPosition(e.getX(), e.getY());
+			if (enlargeEnabled) {
+				mouseMovedListener.changeCursorPosition(e.getX(), e.getY());
+			}
 		}
 
 		public void mouseDragged(MouseEvent e){
-			 int up;
+			if (enlargeEnabled) {
+				updateMouseCoordinates(e);
+			}
+		}
+
+		private void updateMouseCoordinates(MouseEvent e){
 			 if( old_mouse_y == -1 ) {
 				 old_mouse_y = e.getY();
 				 return;
 			 }
+
+			 int up;
 			 if( old_mouse_y > e.getY() ) {
 				 up = e.getY() - old_mouse_y;
 				 mouse_x1 += up;
@@ -107,22 +122,34 @@ public class ControlPanel extends JPanel {
 		}
 	}
 
+	public void update(Observable o, Object event) {
+		if (event instanceof DrawStartEvent) {
+			enlargeEnabled = false;
+		} else if (event instanceof DrawEndEvent) {
+			enlargeEnabled = true;
+		}
+	}
+
 	class inMouseListener extends MouseAdapter{
 		public void mousePressed(MouseEvent e){
-			start_x = mouse_x1 = mouse_x2 = e.getX();
-			start_y = mouse_y1 = mouse_y2 = e.getY();
-			repaint();
+			if (enlargeEnabled) {
+				start_x = mouse_x1 = mouse_x2 = e.getX();
+				start_y = mouse_y1 = mouse_y2 = e.getY();
+				repaint();
+			}
 		}
 		
 		public void mouseReleased(MouseEvent e){
-			if ( x1 == x2 && y1 == y2 ) {
+			if (enlargeEnabled) {
+				if ( x1 == x2 && y1 == y2 ) {
+					initMousePoint();
+					repaint();
+					return;
+				}
+	
+				enlargeListener.changeDrawingArea(x1, x1+(y2-y1), y1, y2);
 				initMousePoint();
-				repaint();
-				return;
 			}
-
-			enlargeListener.changeDrawingArea(x1, x1+(y2-y1), y1, y2);
-			initMousePoint();
 		}
 	}
 }

@@ -6,15 +6,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Observable;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import mandelbrot.events.ChangeProgressListener;
+import mandelbrot.events.DrawEndEvent;
+import mandelbrot.events.DrawStartEvent;
 import mandelbrot.events.EnlargeListener;
 
 class MandelbrotPanel extends JPanel implements EnlargeListener {
-	public boolean antialiasing = false;
+	public ChangeProgressListener changeProgressListener = null;
+	public NotifyDrawEvent notifyDrawEvent;
+	public boolean antiAliasing = false;
 	public boolean smoothing = true;
 	public double viewX = 0.0, viewY = 0.0, zoom = 1.0;
 	public double r1, r2, i1, i2;
@@ -23,7 +28,6 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 	public int width, height;
 	public BufferedImage buffimg;
 	public Graphics2D bfg;
-	public ChangeProgressListener changeProgressListener = null;
 
 	public MandelbrotPanel(int w, int h){
 		width = w;
@@ -33,6 +37,8 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 
 		buffimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		bfg = buffimg.createGraphics();
+
+		notifyDrawEvent = new NotifyDrawEvent();
 
 		initRange();
 	}
@@ -55,7 +61,7 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 	}
 	
 	public void setAntialiasing(boolean b) {
-		antialiasing = b;
+		antiAliasing = b;
 		draw();
 	}
 
@@ -104,5 +110,17 @@ class MandelbrotPanel extends JPanel implements EnlargeListener {
 		r1 = -2.0; r2 = 1.0;
 		i1 = -1.5; i2 = 1.5;
 		viewX = viewY = zoom = 1.0;
+	}
+	
+	public class NotifyDrawEvent extends Observable {
+		public void drawStart() {
+			setChanged();
+			notifyObservers(new DrawStartEvent(this));
+		}
+
+		public void drawEnd() {
+			setChanged();
+			notifyObservers(new DrawEndEvent(this));
+		}
 	}
 }

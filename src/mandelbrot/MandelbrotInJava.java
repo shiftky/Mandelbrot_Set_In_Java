@@ -9,15 +9,20 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import mandelbrot.events.ChangeProgressListener;
+import mandelbrot.events.DrawEndEvent;
+import mandelbrot.events.DrawStartEvent;
 import mandelbrot.events.MouseMovedListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
 public class MandelbrotInJava extends JFrame implements MouseMovedListener,
-	ChangeProgressListener {
+	ChangeProgressListener, Observer {
 	MandelbrotPanel mandelbrotPanel;
 	ControlPanel ctrlPanel;
 	JCheckBox chckbxShowAxes;
@@ -34,6 +39,8 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 	private JLabel lblLoop;
 	private JLabel loopValueLabel;
 	private JButton btnChangePalette;
+	private	JButton btnReset;
+	private JButton btnSave;
 	private JCheckBox chckbxSmooth;
 	private JCheckBox chckbxAntialias;
 
@@ -55,9 +62,9 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 		mainBtnPanel = new JPanel();
 		FlowLayout fl_mainBtnPanel = (FlowLayout) mainBtnPanel.getLayout();
 		fl_mainBtnPanel.setVgap(2);
-		JButton btnReset = new JButton("Reset");
+		btnReset = new JButton("Reset");
 		mainBtnPanel.add(btnReset);
-		JButton btnSave = new JButton("Save");
+		btnSave = new JButton("Save");
 		mainBtnPanel.add(btnSave);
 		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
 		gl_buttonPanel.setHorizontalGroup(gl_buttonPanel.createParallelGroup(
@@ -238,6 +245,8 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 										colorPanel.add(chckbxAntialias);
 										sliderPanel.setLayout(gl_sliderPanel);
 
+		mandelbrotPanel.notifyDrawEvent.addObserver(this);
+		mandelbrotPanel.notifyDrawEvent.addObserver(ctrlPanel);
 		mandelbrotPanel.draw();
 	}
 
@@ -267,9 +276,26 @@ public class MandelbrotInJava extends JFrame implements MouseMovedListener,
 		}
 	}
 
+	public void update(Observable o, Object event) {
+		if (event instanceof DrawStartEvent) {
+			loopSlider.setEnabled(false);
+			btnReset.setEnabled(false);
+			btnSave.setEnabled(false);
+			btnChangePalette.setEnabled(false);
+			chckbxSmooth.setEnabled(false);
+			chckbxAntialias.setEnabled(false);
+		} else if (event instanceof DrawEndEvent) {
+			loopSlider.setEnabled(true);
+			btnReset.setEnabled(true);
+			btnSave.setEnabled(true);
+			btnChangePalette.setEnabled(true);
+			chckbxSmooth.setEnabled(true);
+			chckbxAntialias.setEnabled(true);
+		}
+	}
+
 	public static void main(String[] args) {
-		MandelbrotInJava mandelbrot = new MandelbrotInJava(
-				"Mandelbrot set in Java");
+		MandelbrotInJava mandelbrot = new MandelbrotInJava("Mandelbrot set in Java");
 		mandelbrot.setVisible(true);
 	}
 }
