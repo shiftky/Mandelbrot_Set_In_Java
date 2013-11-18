@@ -16,11 +16,14 @@ import mandelbrot.utils.Utils;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
+
 
 public class MainWindow extends JFrame implements MouseMovedListener,
 	ChangeProgressListener, Observer {
@@ -83,24 +86,18 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 		});
 		mainBtnPanel.add(btnSave);
 		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
-		gl_buttonPanel.setHorizontalGroup(gl_buttonPanel.createParallelGroup(
-				Alignment.LEADING).addGroup(
-				gl_buttonPanel
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE,
-								180, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(454, Short.MAX_VALUE)));
-		gl_buttonPanel.setVerticalGroup(gl_buttonPanel.createParallelGroup(
-				Alignment.TRAILING).addGroup(
-				Alignment.LEADING,
-				gl_buttonPanel
-						.createSequentialGroup()
-						.addContainerGap(GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)));
+		gl_buttonPanel.setHorizontalGroup(
+			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_buttonPanel.createSequentialGroup()
+					.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(460, Short.MAX_VALUE))
+		);
+		gl_buttonPanel.setVerticalGroup(
+			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_buttonPanel.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+		);
 		buttonPanel.setLayout(gl_buttonPanel);
 
 		// Mandelbrot set panel
@@ -267,6 +264,13 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		try {
+			URL url = this.getClass().getResource("/mandelbrot/gui/icon.png");
+		    this.setIconImage(java.awt.Toolkit.getDefaultToolkit().createImage(url));
+		} catch ( Exception ex ) {
+			System.out.println("ks");
+		}
 	}
 
 	public void changeCursorPosition(int x, int y) {
