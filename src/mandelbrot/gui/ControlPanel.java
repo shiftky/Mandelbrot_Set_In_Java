@@ -25,7 +25,7 @@ public class ControlPanel extends JPanel implements Observer {
 	private int x1, x2, y1, y2;
 	private int start_x, start_y;
 	private int old_mouse_y = -1;
-	private boolean enlargeEnabled;
+	private boolean zoomEnabled;
 
 	public ControlPanel(int w, int h){
 		width = w;
@@ -86,13 +86,13 @@ public class ControlPanel extends JPanel implements Observer {
 
 	class inMouseMotionListener extends MouseMotionAdapter{
 		public void mouseMoved(MouseEvent e){
-			if (enlargeEnabled) {
+			if (zoomEnabled) {
 				mouseMovedListener.changeCursorPosition(e.getX(), e.getY());
 			}
 		}
 
 		public void mouseDragged(MouseEvent e){
-			if (enlargeEnabled) {
+			if (zoomEnabled) {
 				updateMouseCoordinates(e);
 			}
 		}
@@ -124,9 +124,9 @@ public class ControlPanel extends JPanel implements Observer {
 
 	public void update(Observable o, Object event) {
 		if (event instanceof DrawStartEvent) {
-			enlargeEnabled = false;
+			zoomEnabled = false;
 		} else if (event instanceof DrawEndEvent) {
-			enlargeEnabled = true;
+			zoomEnabled = true;
 		}
 	}
 
@@ -138,7 +138,7 @@ public class ControlPanel extends JPanel implements Observer {
 		}
 
 		public void mousePressed(MouseEvent e){
-			if (enlargeEnabled) {
+			if (zoomEnabled) {
 				start_x = mouse_x1 = mouse_x2 = e.getX();
 				start_y = mouse_y1 = mouse_y2 = e.getY();
 				repaint();
@@ -146,7 +146,7 @@ public class ControlPanel extends JPanel implements Observer {
 		}
 		
 		public void mouseReleased(MouseEvent e){
-			if (enlargeEnabled) {
+			if (zoomEnabled) {
 				if ( x1 == x2 && y1 == y2 ) {
 					initMousePoint();
 					repaint();

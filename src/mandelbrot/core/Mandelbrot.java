@@ -14,7 +14,7 @@ public class Mandelbrot {
 		Complex z2 = new Complex();
 
 	    int count = 0;
-	    while (z2.abs() < 4.0 && count < max) {
+	    while (z2.abs() < 3.5 && count < max) {
 	    	z = z.sqr();
 	    	z = z.add(c);
 	    	z2 = new Complex(z.re*z.re, z.im*z.im);
@@ -26,7 +26,7 @@ public class Mandelbrot {
 	    } else {
 		    double zM2 = z.abs();
 		    zM2 += 0.000000001;
-		    return 256 * count + (int)(255.0 * Math.log(4 / zM2) / Math.log((z2.re + z2.im) / zM2));
+		    return 256 * count + (int)(255.0 * Math.log(3.5/ zM2) / Math.log((z2.re + z2.im) / zM2));
 		}
 	}
 }
