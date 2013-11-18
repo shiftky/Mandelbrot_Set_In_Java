@@ -44,6 +44,7 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 	private JButton btnSave;
 	private JCheckBox chckbxSmooth;
 	private JCheckBox chckbxAntialias;
+	private boolean drawing = false;
 
 	public MainWindow(String title) {
 		int width = 640, height = 740;
@@ -66,14 +67,18 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 		btnReset = new JButton("Reset");
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				mandelbrotPanel.reset();
+				if ( drawing == false ) {
+					mandelbrotPanel.reset();
+				}
 			}
 		});
 		mainBtnPanel.add(btnReset);
 		btnSave = new JButton("Save");
 		btnSave.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
-				mandelbrotPanel.save();
+				if ( drawing == false ) {
+					mandelbrotPanel.save();
+				}
 			}
 		});
 		mainBtnPanel.add(btnSave);
@@ -168,7 +173,9 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 						btnChangePalette = new JButton("ChangePalette");
 						btnChangePalette.addMouseListener(new MouseAdapter() {
 							public void mouseClicked(MouseEvent arg0) {
-								mandelbrotPanel.changePalette();
+								if ( drawing == false ) {
+									mandelbrotPanel.changePalette();
+								}
 							}
 						});
 						colorPanel.add(btnChangePalette);
@@ -177,7 +184,9 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 						chckbxSmooth.setSelected(true);
 						chckbxSmooth.addMouseListener(new MouseAdapter() {
 							public void mouseClicked(MouseEvent e) {
-								mandelbrotPanel.setSmoothing(chckbxSmooth.isSelected());
+								if ( drawing == false ) {
+									mandelbrotPanel.setSmoothing(chckbxSmooth.isSelected());
+								}
 							}
 						});
 						chckbxSmooth.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
@@ -201,7 +210,9 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 										loopSlider = new JSlider();
 										loopSlider.addMouseListener(new MouseAdapter() {
 											public void mouseReleased(MouseEvent e) {
-												mandelbrotPanel.draw();
+												if ( drawing == false ) {
+													mandelbrotPanel.draw();
+												}
 											}
 										});
 										loopSlider.setValue(30);
@@ -237,7 +248,9 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 										chckbxAntialias = new JCheckBox("Anti-alias");
 										chckbxAntialias.addMouseListener(new MouseAdapter() {
 											public void mouseClicked(MouseEvent e) {
-												mandelbrotPanel.setAntialiasing(chckbxAntialias.isSelected());
+												if ( drawing == false ) {
+													mandelbrotPanel.setAntialiasing(chckbxAntialias.isSelected());
+												}
 											}
 										});
 										colorPanel.add(chckbxAntialias);
@@ -276,6 +289,7 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 
 	public void update(Observable o, Object event) {
 		if (event instanceof DrawStartEvent) {
+			drawing = true;
 			loopSlider.setEnabled(false);
 			btnReset.setEnabled(false);
 			btnSave.setEnabled(false);
@@ -283,6 +297,7 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 			chckbxSmooth.setEnabled(false);
 			chckbxAntialias.setEnabled(false);
 		} else if (event instanceof DrawEndEvent) {
+			drawing = false;
 			loopSlider.setEnabled(true);
 			btnReset.setEnabled(true);
 			btnSave.setEnabled(true);
