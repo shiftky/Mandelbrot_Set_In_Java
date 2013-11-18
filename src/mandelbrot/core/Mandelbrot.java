@@ -1,5 +1,7 @@
 package mandelbrot.core;
 
+import mandelbrot.utils.Complex;
+
 public class Mandelbrot {
 	private int max;
 	

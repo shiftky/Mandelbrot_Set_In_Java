@@ -1,7 +1,8 @@
-package mandelbrot.core;
+package mandelbrot.utils;
 
-class Complex{
-	double re, im;
+public class Complex{
+	public double re;
+	public double im;
 	
 	public Complex(){
 		re = 0.0;

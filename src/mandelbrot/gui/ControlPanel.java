@@ -14,11 +14,11 @@ import javax.swing.JPanel;
 
 import mandelbrot.events.DrawEndEvent;
 import mandelbrot.events.DrawStartEvent;
-import mandelbrot.events.EnlargeListener;
+import mandelbrot.events.ZoomEventListener;
 import mandelbrot.events.MouseMovedListener;
 
 public class ControlPanel extends JPanel implements Observer {
-	private EnlargeListener enlargeListener = null;
+	private ZoomEventListener zoomListener = null;
 	private MouseMovedListener mouseMovedListener = null;
 	private int width, height;
 	private int mouse_x1, mouse_x2, mouse_y1, mouse_y2;
@@ -38,8 +38,8 @@ public class ControlPanel extends JPanel implements Observer {
 		addMouseMotionListener(new inMouseMotionListener());
 	}
 
-	public void setEnlergeListener(EnlargeListener listener){
-		this.enlargeListener = listener;
+	public void setEnlergeListener(ZoomEventListener listener){
+		this.zoomListener = listener;
 	}
 	
 	public void setMouseMovedListener(MouseMovedListener listener){
@@ -131,6 +131,12 @@ public class ControlPanel extends JPanel implements Observer {
 	}
 
 	class inMouseListener extends MouseAdapter{
+		public void mouseClicked(MouseEvent e){
+			if ( e.getButton() == MouseEvent.BUTTON3 ) {
+				zoomListener.zoomOut();
+			}
+		}
+
 		public void mousePressed(MouseEvent e){
 			if (enlargeEnabled) {
 				start_x = mouse_x1 = mouse_x2 = e.getX();
@@ -147,7 +153,7 @@ public class ControlPanel extends JPanel implements Observer {
 					return;
 				}
 	
-				enlargeListener.changeDrawingArea(x1, x1+(y2-y1), y1, y2);
+				zoomListener.zoomIn(x1, x1+(y2-y1), y1, y2);
 				initMousePoint();
 			}
 		}

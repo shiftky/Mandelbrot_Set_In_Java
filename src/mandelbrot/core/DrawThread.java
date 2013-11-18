@@ -3,14 +3,17 @@ package mandelbrot.core;
 import java.awt.Color;
 
 import mandelbrot.gui.MandelbrotPanel;
+import mandelbrot.utils.Complex;
 import mandelbrot.utils.Utils;
 
 public class DrawThread extends Thread {
-
 	private MandelbrotPanel panel;
+	private double r1, r2, i1, i2;
 
 	public DrawThread(MandelbrotPanel mandelbrotSetPanel) {
 		panel = mandelbrotSetPanel;
+		r1 = panel.currentGraphArea.xs; r2 = panel.currentGraphArea.xe;
+		i1 = panel.currentGraphArea.ys; i2 = panel.currentGraphArea.ye;
 	}
 
 	public void run() {
@@ -25,8 +28,8 @@ public class DrawThread extends Thread {
 		int progress_cnt = 0;
 		for (int x = 0; x < panel.width; x++) {
 			for (int y = 0; y < panel.height; y++) {
-				Complex z = new Complex(Utils.map((double) x, 0.0, (double) panel.width, panel.r1, panel.r2),
-										Utils.map((double) y, 0.0, (double) panel.height, panel.i1, panel.i2));
+				Complex z = new Complex(Utils.map((double) x, 0.0, (double) panel.width, r1, r2),
+										Utils.map((double) y, 0.0, (double) panel.height, i1, i2));
 
 				Color color = colorPalette.color(mandelbrot.calc(z));
 				if ( panel.antiAliasing ) {

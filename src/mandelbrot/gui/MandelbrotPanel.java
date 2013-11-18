@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Observable;
+import java.util.Stack;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,15 +16,20 @@ import mandelbrot.core.DrawThread;
 import mandelbrot.events.ChangeProgressListener;
 import mandelbrot.events.DrawEndEvent;
 import mandelbrot.events.DrawStartEvent;
-import mandelbrot.events.EnlargeListener;
+import mandelbrot.events.ZoomEventListener;
 import mandelbrot.save.SaveImage;
+import mandelbrot.utils.GraphArea;
 import mandelbrot.utils.Utils;
 
-public class MandelbrotPanel extends JPanel implements EnlargeListener {
+public class MandelbrotPanel extends JPanel implements ZoomEventListener {
+	private GraphArea defaultGraphArea;
+	public GraphArea currentGraphArea; 
 	public ChangeProgressListener changeProgressListener = null;
 	public NotifyDrawEvent notifyDrawEvent;
+	public Stack<GraphArea> graphAreaStack = new Stack<GraphArea>();
 	public boolean antiAliasing = false;
 	public boolean smoothing = true;
+	public boolean drawing = false;
 	public double viewX = 0.0, viewY = 0.0, zoom = 1.0;
 	public double r1, r2, i1, i2;
 	public int palette = 0;
@@ -40,6 +46,7 @@ public class MandelbrotPanel extends JPanel implements EnlargeListener {
 
 		buffimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		bfg = buffimg.createGraphics();
+		defaultGraphArea = new GraphArea(-2.0, 1.0, -1.5, 1.5);
 
 		notifyDrawEvent = new NotifyDrawEvent();
 
@@ -77,22 +84,32 @@ public class MandelbrotPanel extends JPanel implements EnlargeListener {
 		Thread thread = new DrawThread(this);
 		thread.start();
 	}
-
-	public void changeDrawingArea(int x1, int x2, int y1, int y2) {
+	
+	public void zoomIn(int x1, int x2, int y1, int y2) {
 		if (x2 != -1 && y2 != -1 ){
-			double tmp_r1 = Utils.map((double) x1, 0.0, (double) width, r1, r2);
-			double tmp_r2 = Utils.map((double) x2, 0.0, (double) width, r1, r2);
-			double tmp_i1 = Utils.map((double) y1, 0.0, (double) height, i1, i2);
-			double tmp_i2 = Utils.map((double) y2, 0.0, (double) height, i1, i2);
-			r1 = tmp_r1; r2 = tmp_r2;
-			i1 = tmp_i1; i2 = tmp_i2;
-			
-			viewX += zoom * Math.min(x2, x1) / Math.min(width, height);
-			viewY += zoom * Math.min(y2, y1) / Math.min(width, height);
-			zoom *= Math.max((double)Math.abs(x2-x1)/width, (double)Math.abs(y2-y1)/height);
-
-			draw();
+			graphAreaStack.push(currentGraphArea);
+			double tmp_r1 = Utils.map((double) x1, 0.0, (double) width, currentGraphArea.xs, currentGraphArea.xe);
+			double tmp_r2 = Utils.map((double) x2, 0.0, (double) width, currentGraphArea.xs, currentGraphArea.xe);
+			double tmp_i1 = Utils.map((double) y1, 0.0, (double) height, currentGraphArea.ys, currentGraphArea.ye);
+			double tmp_i2 = Utils.map((double) y2, 0.0, (double) height, currentGraphArea.ys, currentGraphArea.ye);
+			currentGraphArea = new GraphArea(tmp_r1, tmp_r2, tmp_i1, tmp_i2);
+			changeDrawingArea();
 		}
+	}
+	
+	public void zoomOut() {
+		if ( currentGraphArea.eql(defaultGraphArea) == false && drawing == false ) {
+			currentGraphArea = graphAreaStack.pop();
+			changeDrawingArea();
+		}
+	}
+
+	public void changeDrawingArea() {
+		currentGraphArea = new GraphArea(currentGraphArea.xs, currentGraphArea.xe, currentGraphArea.ys, currentGraphArea.ye);
+		viewX += zoom * Math.min(currentGraphArea.xe, currentGraphArea.xs) / Math.min(width, height);
+		viewY += zoom * Math.min(currentGraphArea.ye, currentGraphArea.ys) / Math.min(width, height);
+		zoom *= Math.max((double)Math.abs(currentGraphArea.xe-currentGraphArea.xs)/width, (double)Math.abs(currentGraphArea.ye-currentGraphArea.ys)/height);
+		draw();
 	}
 
 	public void save() {
@@ -110,18 +127,19 @@ public class MandelbrotPanel extends JPanel implements EnlargeListener {
 	}
 
 	private void initRange(){
-		r1 = -2.0; r2 = 1.0;
-		i1 = -1.5; i2 = 1.5;
+		currentGraphArea = defaultGraphArea;
 		viewX = viewY = zoom = 1.0;
 	}
 	
 	public class NotifyDrawEvent extends Observable {
 		public void drawStart() {
+			drawing = true;
 			setChanged();
 			notifyObservers(new DrawStartEvent(this));
 		}
 
 		public void drawEnd() {
+			drawing = false;
 			setChanged();
 			notifyObservers(new DrawEndEvent(this));
 		}

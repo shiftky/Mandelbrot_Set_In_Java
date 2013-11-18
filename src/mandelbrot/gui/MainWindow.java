@@ -64,8 +64,18 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 		FlowLayout fl_mainBtnPanel = (FlowLayout) mainBtnPanel.getLayout();
 		fl_mainBtnPanel.setVgap(2);
 		btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mandelbrotPanel.reset();
+			}
+		});
 		mainBtnPanel.add(btnReset);
 		btnSave = new JButton("Save");
+		btnSave.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent arg0) {
+				mandelbrotPanel.save();
+			}
+		});
 		mainBtnPanel.add(btnSave);
 		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
 		gl_buttonPanel.setHorizontalGroup(gl_buttonPanel.createParallelGroup(
@@ -87,19 +97,6 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 								GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)));
 		buttonPanel.setLayout(gl_buttonPanel);
-
-		// event listener
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				mandelbrotPanel.reset();
-			}
-		});
-
-		btnSave.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent arg0) {
-				mandelbrotPanel.save();
-			}
-		});
 
 		// Mandelbrot set panel
 		JPanel graphicsPanel = new JPanel();
@@ -260,8 +257,8 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 	}
 
 	public void changeCursorPosition(int x, int y) {
-		double real = Utils.map(x, 0.0, mandelbrotPanel.width, mandelbrotPanel.r1, mandelbrotPanel.r2);
-		double img = Utils.map(y, 0.0, mandelbrotPanel.width, mandelbrotPanel.r1, mandelbrotPanel.r2);
+		double real = Utils.map(x, 0.0, mandelbrotPanel.width, mandelbrotPanel.currentGraphArea.xs, mandelbrotPanel.currentGraphArea.xe);
+		double img = Utils.map(y, 0.0, mandelbrotPanel.width, mandelbrotPanel.currentGraphArea.ys, mandelbrotPanel.currentGraphArea.ye);
 		lblReValue.setText(String.format("%.012f", real));
 		lblImValue.setText(String.format("%.012f", img));
 	}
