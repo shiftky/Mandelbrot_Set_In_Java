@@ -23,8 +23,6 @@ import java.util.Observer;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
-
-
 public class MainWindow extends JFrame implements MouseMovedListener,
 	ChangeProgressListener, Observer {
 	MandelbrotPanel mandelbrotPanel;
@@ -37,7 +35,6 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 	private JLabel lblImValue;
 	private JPanel lblPanel;
 	private JProgressBar progressBar;
-	private JPanel mainBtnPanel;
 	private JPanel sliderPanel;
 	private JSlider loopSlider;
 	private JLabel lblLoop;
@@ -48,6 +45,9 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 	private JCheckBox chckbxSmooth;
 	private JCheckBox chckbxAntialias;
 	private boolean drawing = false;
+	private JButton btnAbout;
+	private JPanel mainButtonPanel;
+	private JPanel AboutButtonPanel;
 
 	public MainWindow(String title) {
 		int width = 640, height = 740;
@@ -58,25 +58,15 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 
 		JPanel operationPanel = new JPanel();
 		getContentPane().add(operationPanel, BorderLayout.NORTH);
-		operationPanel.setLayout(new BorderLayout(0, 0));
-
-		// operation panel
-		JPanel buttonPanel = new JPanel();
-		operationPanel.add(buttonPanel, BorderLayout.NORTH);
-
-		mainBtnPanel = new JPanel();
-		FlowLayout fl_mainBtnPanel = (FlowLayout) mainBtnPanel.getLayout();
-		fl_mainBtnPanel.setVgap(2);
+		
+		mainButtonPanel = new JPanel();
+		FlowLayout flowLayout_4 = (FlowLayout) mainButtonPanel.getLayout();
+		flowLayout_4.setAlignment(FlowLayout.LEFT);
+		flowLayout_4.setVgap(0);
 		btnReset = new JButton("Reset");
-		btnReset.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if ( drawing == false ) {
-					mandelbrotPanel.reset();
-				}
-			}
-		});
-		mainBtnPanel.add(btnReset);
+		mainButtonPanel.add(btnReset);
 		btnSave = new JButton("Save");
+		mainButtonPanel.add(btnSave);
 		btnSave.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				if ( drawing == false ) {
@@ -84,21 +74,46 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 				}
 			}
 		});
-		mainBtnPanel.add(btnSave);
-		GroupLayout gl_buttonPanel = new GroupLayout(buttonPanel);
-		gl_buttonPanel.setHorizontalGroup(
-			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_buttonPanel.createSequentialGroup()
-					.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(460, Short.MAX_VALUE))
+		btnReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if ( drawing == false ) {
+					mandelbrotPanel.reset();
+				}
+			}
+		});
+		
+		AboutButtonPanel = new JPanel();
+		FlowLayout flowLayout_5 = (FlowLayout) AboutButtonPanel.getLayout();
+		flowLayout_5.setVgap(0);
+		
+		btnAbout = new JButton("About");
+		AboutButtonPanel.add(btnAbout);
+		GroupLayout gl_operationPanel = new GroupLayout(operationPanel);
+		gl_operationPanel.setHorizontalGroup(
+			gl_operationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_operationPanel.createSequentialGroup()
+					.addGap(20)
+					.addComponent(mainButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
+					.addComponent(AboutButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(20))
 		);
-		gl_buttonPanel.setVerticalGroup(
-			gl_buttonPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_buttonPanel.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(mainBtnPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+		gl_operationPanel.setVerticalGroup(
+			gl_operationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_operationPanel.createSequentialGroup()
+					.addGap(5)
+					.addGroup(gl_operationPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(mainButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(AboutButtonPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
 		);
-		buttonPanel.setLayout(gl_buttonPanel);
+		operationPanel.setLayout(gl_operationPanel);
+		btnAbout.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				AboutWindow about = new AboutWindow();
+				about.setVisible(true);
+			}
+		});
 
 		// Mandelbrot set panel
 		JPanel graphicsPanel = new JPanel();
@@ -269,7 +284,7 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 			URL url = this.getClass().getResource("/mandelbrot/gui/icon.png");
 		    this.setIconImage(java.awt.Toolkit.getDefaultToolkit().createImage(url));
 		} catch ( Exception ex ) {
-			System.out.println("ks");
+			System.out.println("Error: Failed set icon.");
 		}
 	}
 
@@ -297,6 +312,7 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 			loopSlider.setEnabled(false);
 			btnReset.setEnabled(false);
 			btnSave.setEnabled(false);
+			btnAbout.setEnabled(false);
 			btnChangePalette.setEnabled(false);
 			chckbxSmooth.setEnabled(false);
 			chckbxAntialias.setEnabled(false);
@@ -305,6 +321,7 @@ public class MainWindow extends JFrame implements MouseMovedListener,
 			loopSlider.setEnabled(true);
 			btnReset.setEnabled(true);
 			btnSave.setEnabled(true);
+			btnAbout.setEnabled(true);
 			btnChangePalette.setEnabled(true);
 			chckbxSmooth.setEnabled(true);
 			chckbxAntialias.setEnabled(true);
