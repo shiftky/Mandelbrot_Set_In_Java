@@ -41,6 +41,7 @@ public class MandelbrotPanel extends JPanel implements ZoomEventListener {
 	public MandelbrotPanel(int w, int h){
 		width = w;
 		height = h;
+
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(width, height));
 
@@ -77,7 +78,7 @@ public class MandelbrotPanel extends JPanel implements ZoomEventListener {
 
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(buffimg, 0, 0, this);
+		g2d.drawImage(buffimg, 0, 0, width, height, this);
 	}
 
 	public void draw(){

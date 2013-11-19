@@ -1,7 +1,6 @@
 package mandelbrot.core;
 
 import java.awt.Color;
-
 import mandelbrot.gui.MandelbrotPanel;
 import mandelbrot.utils.Complex;
 import mandelbrot.utils.Utils;
@@ -26,6 +25,7 @@ public class DrawThread extends Thread {
 		ColorPalette colorPalette = new ColorPalette(panel.palette, panel.smoothing);
 
 		int progress_cnt = 0;
+		int resolution = panel.width * panel.height;
 		for (int x = 0; x < panel.width; x++) {
 			for (int y = 0; y < panel.height; y++) {
 				Complex z = new Complex(Utils.map((double) x, 0.0, (double) panel.width, r1, r2),
@@ -40,7 +40,7 @@ public class DrawThread extends Thread {
 				panel.bfg.fillRect(x, y, 1, 1);
 
 				if ( panel.changeProgressListener != null ) {
-					int progress = (int) Utils.map(progress_cnt++, 0.0, panel.width*panel.height, 0.0, 100.0) + 1;
+					int progress = (int) Utils.map(progress_cnt++, 0.0, resolution, 0.0, 100.0) + 1;
 					panel.changeProgressListener.changeProgress(progress);
 				}
 			}
